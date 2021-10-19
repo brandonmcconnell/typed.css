@@ -64,7 +64,7 @@ Properties of the `$options` map can only be overwridden using another object of
 ```scss
 @include typewriter("String 1", "String 2");
 ```
-**Type two strings, adjust the speed of `type` and `pause-deleted` properties**
+**Type two strings, adjust the speed of `type` and `pause-deleted` properties** (2 methods)
 ```scss
 @include typewriter("String 1", "String 2", [.1, null, null, .5]); 
 ```
