@@ -16,6 +16,7 @@ The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href=
         </ul>
     </li>
     <li><a href="#browser-support">Browser Support</a></li>
+    <li><a href="#credits">Credits</a></li>
 </ul>
 
 <h2 id="syntax">Syntax</h2>
@@ -202,3 +203,7 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
     <li>Safari on iOS ❌</li>
     <li>Samsung Internet ✅</li>
 </ul>
+
+<h2 id="credits">Credits</h2>
+<p>Hi there, I'm Brandon! 👨🏻‍💻</p>
+<p>It's nioce to meet you. So far, SCSS Typewriter has been a one-man show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in the effort to grow this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
