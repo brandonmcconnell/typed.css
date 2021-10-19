@@ -58,56 +58,38 @@ Properties of the `$options` map can only be overwridden using another object of
 
 **Type a single string**
 ```scss
-selector {
-	@include typewriter("String 1");
-}
+@include typewriter("String 1");
 ```
 **Type two strings**
 ```scss
-selector {
-	@include typewriter("String 1", "String 2");
-}
+@include typewriter("String 1", "String 2");
 ```
 **Type two strings, adjust the speed of "type" and "pause-deleted" properties**
 ```scss
-selector {
-	@include typewriter("String 1", "String 2", [.1, null, null, .5]); 
-}
+@include typewriter("String 1", "String 2", [.1, null, null, .5]); 
 ```
 ```scss
-selector {
-	@include typewriter("String 1", "String 2", (type: .1, pause-deleted: .5));
-}
+@include typewriter("String 1", "String 2", (type: .1, pause-deleted: .5));
 ```
 **Type three strings, disable the caret**
 ```scss
-selector {
-	@include typewriter("String 1", "String 2", "String 3", null, (caret: true));
-}
+@include typewriter("String 1", "String 2", "String 3", null, (caret: true));
 ```
 **Type two strings, disable the caret, loop three times and end on the original string**
 ```scss
-selector {
-	@include typewriter("String 1", "String 2", null, (caret: true, iterations: 3));
-}
+@include typewriter("String 1", "String 2", null, (caret: true, iterations: 3));
 ```
 **Type two strings, provide a custom animation name**
 ```scss
-selector {
-	@include typewriter("String 1", "String 2", null, (name: "my-typewriter"));
-}
+@include typewriter("String 1", "String 2", null, (name: "my-typewriter"));
 ```
 **Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in JavaScript**
 ```scss
-selector {
-	@include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
-}
+@include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
 **Color a typewriter including the blinking cursor**
 (hint: it inherits the text color automatically using `currentColor`)
 ```scss
-selector {
-	color: #f00;
-	@include typewriter("String 1", "String 2");
-}
+color: #f00;
+@include typewriter("String 1", "String 2");
 ```
