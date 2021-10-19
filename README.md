@@ -5,7 +5,7 @@ The SCSS Typewriter is a fully functional typewriter mixin for SCSS.
 ## Syntax
 
 ```scss
-@include typewriter(string1 [, string2, ..., stringN, $speeds, $options])
+@include typewriter($string1 [, $string2, ..., $stringN, $speeds, $options])
 ```
 
 ## Usage
