@@ -38,7 +38,7 @@ Finally, the last parameter is the `$options` map object, for which the default 
 ```scss
 $options: (
 	name: '',
-	caret: false,
+	caret: true,
 	caret-speed: .75,
 	delay: 1,
 	iterations: infinite
