@@ -83,7 +83,8 @@ Properties of the `$options` map can only be overwridden using another object of
 ```scss
 @include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
-**Color a typewriter including the blinking cursor (hint: it inherits the text color automatically using `currentColor`)**
+**Color a typewriter including the blinking cursor**
+(hint: it inherits the text color automatically using `currentColor`)
 ```scss
 color: #f00;
 @include typewriter("String 1", "String 2");
