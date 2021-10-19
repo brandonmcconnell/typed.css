@@ -39,8 +39,8 @@ Finally, the last parameter is the `$options` map object, for which the default 
 $options: (
 	name: '',
 	caret: false,
-	caret-speed: .75s,
-	delay: 1s,
+	caret-speed: .75,
+	delay: 1,
 	iterations: infinite
 );
 ```
@@ -48,8 +48,8 @@ $options: (
 Properties of the `$options` map can only be overwridden using another object of the map type, with matching keys. This argument and all its properties are entirely optional. The permitted properties for the `$options` map—along with their definitions—are:
  - `name`: **(string)** A preferred name for the animation created. If you do not supply an animation name, or when an empty string is the value (as is the default), a generic one is used in the format `typewriter-0` where the `0` increments with each use of the mixin to avoid naming conflicts.
  - `caret`: **(bool)** This boolean value determines whether to show a blinking text (insertion) cursor/caret at the end of the dynamically typed/deleted text where the caret would naturally be. This value defaults to `true`, but changing it to `false` will disable the blinking caret. The color of the caret defaults to match the same color as the text by making use of `currentColor`. To adjust the styles of the caret, add styles to the `::after` pseudo-element of the style which you apply the mixin `@include` to, conversely to the typed text itself, which makes use of the `::before` pseudo-element.
- - `caret-speed`: **(time)** This is the duration of one "blink" animation (in seconds) of the insertion cursor/caret when it has been enabled using the `caret` property. Like the `$speed` object values, these number values do not accept units.
- - `delay`: **(delay)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
+ - `caret-speed`: **(number)** This is the duration of one "blink" animation (in seconds) of the insertion cursor/caret when it has been enabled using the `caret` property. Like the `$speed` object values, these number values do not accept units.
+ - `delay`: **(number)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
  - `iterations`: **(number)** This value determines how many times to loop the animation. This defaults to `infinite` to loop continuously. If a finite number is provided (e.g. `1`, `15`, etc.), the animation will repeat that many times and then type the first string again, at which point the typing animation will conclude, but the caret animation will continue if `caret` is enabled. The final typing animation of the first string is rendered via a separate animation that runs once the first full animation has completed all iterations.
 
 ## Examples
