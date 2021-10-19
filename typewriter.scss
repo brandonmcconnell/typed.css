@@ -1,0 +1,195 @@
+@function __typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $string, $letter, $modifier) {
+	$stringsPast: $string - 1; $time: 0;
+	@while $stringsPast > 0 {
+		$time: $time
+			+ (($durCharFwd + $durCharBwd) * (str-length(nth($strings, $stringsPast))))
+			+ $durFullGap + $durDoneGap;
+		$stringsPast: $stringsPast - 1;
+	}
+	@if $letter <= str-length(nth($strings, $string)) {
+		$time: $time
+			+ ($durCharFwd * ($letter - 1));
+	} @else {
+		$time: $time
+			+ ($durCharFwd * str-length(nth($strings, $string)))
+			+ $durFullGap
+			+ ($durCharBwd * ($letter - str-length(nth($strings, $string))));
+	}
+	@return ($time / $durTotal * 100 + $modifier) + "%";
+}
+@mixin __typewriter-final-percent-calc($durCharFwd, $string, $animationName) {
+	@keyframes #{$animationName}-final {
+		@for $i from 1 through str-length($string) {
+			$modifier: .001;
+			@if $i == 1 { $modifier: 0; }
+			#{($i - 1) / str-length($string) * 100 + $modifier}%, #{$i / str-length($string) * 100}% {
+				content: str-slice($string, 1, $i);
+			}
+		}
+	}
+}
+$__typewriter-id: 0;
+@mixin typewriter($parameters...) {
+	@debug $parameters;
+	$strings: ();
+	$speeds: (
+		type: .1,
+		pause-typed: 2,
+		delete: .08,
+		pause-deleted: 1
+	);
+	$options: (
+		name: '',
+		caret: true,
+		caret-speed: .75,
+		delay: 1,
+		iterations: infinite
+	);
+	$stringsComplete: false;
+	$speedsComplete: false;
+	$optionsComplete: false;
+	$parameter-nth: 1;
+	@each $parameter in $parameters {
+		@if not $stringsComplete {
+			@if type-of($parameter) == string {
+				$strings: append($strings, $parameter);
+			}
+			@if length($parameters) > $parameter-nth and type-of(nth($parameters, $parameter-nth + 1)) != 'string' {
+				$stringsComplete: true;
+			}
+		} @else if not $speedsComplete {
+			@if type-of($parameter) == map {
+				@each $key, $value in $parameter {
+					@if index(map-keys($speeds), $key) == null {
+						@error "#{$key} is not a valid speed property. Accepted speed property keys are #{append(map-keys($speeds), null, comma)}.";
+					}
+					@if type-of($value) != number {
+						@error "The value #{$value} is not a number.";
+					}
+					$speeds: map-merge($speeds, ($key: $value));
+				}
+			} @else if type-of($parameter) == list {
+				@if length($parameter) > 4 {
+					@error "The speed list argument only accepts 4 numbers when used a list.";
+				}
+				@for $i from 1 through length($parameter) {
+					@if type-of(nth($parameter, $i)) != number {
+						@error "The value #{$value} is not a number.";
+					}
+					@if nth($parameter, $i) != null {
+						$speeds: map-merge($speeds, (nth(map-keys($speeds), $i): nth($parameter, $i)));
+					}
+				}
+			} @else if $parameter != null {
+				@error "The speed argument requires either a map, list, or null value."
+			}
+			$speedsComplete: true;
+		} @else if not $optionsComplete {
+			@if $parameter != null {
+				@if type-of($parameter) != map {
+					@error "#{$key} is not a valid options configuration map.";
+				}
+				@each $key, $value in $parameter {
+					@if index(map-keys($options), $key) == null {
+						@error "#{$key} is not a valid options property. Accepted options property keys are #{append(map-keys($options), null, comma)}.";
+					}
+					@if $key == iterations {
+						@if $value != infinite and (type-of($value) == number and ($value < 0 or $value != round($value))) {
+							@error "The iterations value #{$value} requires a positive integer or infinite.";
+						}
+					} @else if type-of($value) != type-of(map-get($options, $key)) {
+						@error "The #{$key} value #{$value} does not match the type #{type-of(map-get($options, $key))}.";
+					}
+					$options: map-merge($options, ($key: $value));
+				}
+			}
+			$optionsComplete: true;
+		} @else {
+			@error "No additional arguments are permitted after the options object.";
+		}
+		$parameter-nth: $parameter-nth + 1;
+	}
+	$durCharFwd: map-get($speeds, type);
+	$durFullGap: map-get($speeds, pause-typed);
+	$durCharBwd: map-get($speeds, delete);
+	$durDoneGap: map-get($speeds, pause-deleted);
+	$animationDelay: map-get($options, delay);
+	@if $animationDelay < 0s {
+		@error "Delay requires a positive number value (integer or float) without units. #{$animationDelay} is less than 0.";
+	}
+	$caretSpeed: map-get($options, caret-speed);
+	@if $caretSpeed < 0s {
+		@error "Delay requires a positive number value (integer or float) without units. #{$animationDelay} is less than 0.";
+	}
+	$iterations: map-get($options, iterations);
+	// initializing some values ✊🏼
+	$animationName: '';
+	@if map-get($options, name) != '' {
+		$animationName: #{map-get($options, name)};
+	} @else {
+		$animationName: typewriter-#{$__typewriter-id};
+		$__typewriter-id: $__typewriter-id + 1;
+	}
+	$charCount: 0;
+	$durTotal: 0;
+	@each $string in $strings {
+		$charCount: $charCount + str-length($string);
+		$durTotal: $durTotal
+			+ (str-length($string) * ($durCharFwd + $durCharBwd))
+			+ $durFullGap + $durDoneGap;
+	}
+	&::before {
+		content: "​";
+		white-space: pre;
+		@if $iterations == infinite {
+			animation: #{$animationName} #{$durTotal}s linear #{$animationDelay}s #{$iterations} forwards;
+		} @else {
+			animation:
+				#{$animationName} #{$durTotal}s linear #{$animationDelay}s #{$iterations} forwards,
+				#{$animationName}-final #{str-length(nth($strings, 1)) * $durCharFwd}s linear #{$durTotal * $iterations + $animationDelay}s 1 forwards;
+			@include __typewriter-final-percent-calc($durCharFwd, nth($strings, 1), $animationName);
+		}
+	}
+	@if map-get($options, caret) {
+		&::after {
+			content: "​";
+			position: relative;
+			display: inline-block;
+			padding-right: .1ch;
+			border-right: 1ch solid currentColor;;
+			white-space: nowrap;
+			animation: #{$animationName}-caret #{$caretSpeed}s linear #{$animationDelay}s infinite forwards;
+		}
+	}
+	// now THIS is where the magic happens... ✨
+	@keyframes #{$animationName} {
+		@for $i from 1 through length($strings) {
+			@for $j from 1 through (str-length(nth($strings, $i)) * 2) {
+				@if $j < str-length(nth($strings, $i)) * 2 {
+					#{__typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $i, $j+1, -.001)} {
+						@if $j <= str-length(nth($strings, $i)) {
+							content: quote(#{str-slice(nth($strings, $i), 1, $j)});
+						} @else {
+							content: quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))});
+						}
+					}
+				} @else {
+					@if $i < length($strings) {
+						#{__typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $i+1, 1, -.001)} {
+							content: "​";
+						}
+					} @else {
+						#{__typewriter-percent-calc($durCharFwd, $durFullGap, $durCharBwd, $durDoneGap, $durTotal, $strings, $i, $j, 0)}, 100% {
+							content: "​";
+						}
+					}
+				}
+			}
+		}
+	}
+	@if map-get($options, caret) {
+		@keyframes #{$animationName}-caret {
+			75% { border-color: transparent; }
+		}
+	}
+}
