@@ -2,6 +2,9 @@
 
 The SCSS Typewriter is a fully functional typewriter mixin for SCSS.
 
+![demonstration of SCSS typewriter in action](http://i.imgur.com/OUkLi.gif)
+<div align="center">[Live Demo](http://i.imgur.com/OUkLi.gif)</div>
+
 ## Syntax
 
 ```scss
@@ -66,7 +69,7 @@ Properties of the `$options` map can only be overwridden using another object of
 ```
 **Type two strings, adjust the speed of `type` and `pause-deleted` properties** (2 methods)
 ```scss
-@include typewriter("String 1", "String 2", [.1, null, null, .5]); 
+@include typewriter("String 1", "String 2", [.1, null, null, .5]);
 ```
 ```scss
 @include typewriter("String 1", "String 2", (type: .1, pause-deleted: .5));

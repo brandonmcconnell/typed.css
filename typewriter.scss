@@ -73,7 +73,7 @@ $__typewriter-id: 0;
 					@error "The speed list argument only accepts 4 numbers when used a list.";
 				}
 				@for $i from 1 through length($parameter) {
-					@if type-of(nth($parameter, $i)) != number {
+					@if nth($parameter, $i) != null and type-of(nth($parameter, $i)) != number {
 						@error "The value #{$value} is not a number.";
 					}
 					@if nth($parameter, $i) != null {
@@ -128,7 +128,7 @@ $__typewriter-id: 0;
 		$animationName: #{map-get($options, name)};
 	} @else {
 		$animationName: typewriter-#{$__typewriter-id};
-		$__typewriter-id: $__typewriter-id + 1;
+		$__typewriter-id: $__typewriter-id + 1 !global;
 	}
 	$charCount: 0;
 	$durTotal: 0;
