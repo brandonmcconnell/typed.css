@@ -69,44 +69,44 @@ Properties of the `$options` map can only be overwridden using another object of
 
 ### Basic Examples
 
-**Type a single string**
+Type a single string
 ```scss
 @include typewriter("String 1");
 ```
-**Type two strings**
+Type two strings
 ```scss
 @include typewriter("String 1", "String 2");
 ```
-**Type two strings, adjust the speed of `type` and `pause-deleted` properties** (2 methods)
+Type two strings, adjust the speed of `type` and `pause-deleted` properties (2 methods)
 ```scss
 @include typewriter("String 1", "String 2", [.1, null, null, .5]);
 ```
 ```scss
 @include typewriter("String 1", "String 2", (type: .1, pause-deleted: .5));
 ```
-**Type three strings, disable the caret**
+Type three strings, disable the caret
 ```scss
 @include typewriter("String 1", "String 2", "String 3", null, (caret: false));
 ```
-**Type two strings, disable the caret, loop three times and end on the original string**
+Type two strings, disable the caret, loop three times and end on the original string
 ```scss
 @include typewriter("String 1", "String 2", null, (caret: false, iterations: 3));
 ```
-**Type two strings, iterating twice, then end on a custom string**
+Type two strings, iterating twice, then end on a custom string
 ```scss
 @include typewriter("String 1", "String 2", null, (iterations: 2, end-on: "Done!"));
 ```
-**Type two strings, provide a custom animation name**
+Type two strings, provide a custom animation name
 ```scss
 @include typewriter("String 1", "String 2", null, (name: "my-typewriter"));
 ```
-**Color a typewriter including the blinking cursor**
+Color a typewriter including the blinking cursor
 (hint: it inherits the text color automatically using `currentColor`)
 ```scss
 color: #f00;
 @include typewriter("String 1", "String 2");
 ```
-**Setting custom styles per string, and double the default typing speed by passing a numeric multiplier value in place of the `$speeds` object.**
+Setting custom styles per string, and double the default typing speed by passing a numeric multiplier value in place of the `$speeds` object.
 ```scss
 @include typewriter((
     "Red": (color: #e53935),
@@ -121,7 +121,7 @@ color: #f00;
 
 ### Advanced Examples
 
-**Type mid-string, adding custom styles to text and caret**
+Type mid-string, adding custom styles to text and caret
 ```html
 <p>I am a developer and enjoy working with languages like <span class="typewriter"></span> in my spare time.</p>
 ```
@@ -137,7 +137,7 @@ color: #f00;
     }
 }
 ```
-**Add custom styles per string including the closing `end-on` string, excluding certain string(s) using an empty map, adding custom `$speed` object values using the list method, and setting values for each of the caret-related styling settings `caret-[speed/width/color/space]`.**
+Add custom styles per string including the closing `end-on` string, excluding certain string(s) using an empty map, adding custom `$speed` object values using the list method, and setting values for each of the caret-related styling settings `caret-[speed/width/color/space]`.
 ```scss
 @include typewriter(
     (
@@ -168,7 +168,7 @@ color: #f00;
     )
 );
 ```
-**Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in JavaScript**
+Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in JavaScript
 ```scss
 @include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
