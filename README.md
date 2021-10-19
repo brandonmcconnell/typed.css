@@ -15,6 +15,7 @@ The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href=
             <li><a href="#advanced-examples">Advanced Examples</a></li>
         </ul>
     </li>
+    <li><a href="#browser-support">Browser Support</a></li>
 </ul>
 
 <h2 id="syntax">Syntax</h2>
@@ -185,3 +186,19 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
 ```scss
 @include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
+
+<h2 id="browser-support">Browser Support</h2>
+<ul>
+    <li>Chrome ✅</li>
+    <li>Edge ✅</li>
+    <li>Firefox ✅</li>
+    <li>Internet Explorer ✅</li>
+    <li>Opera ✅</li>
+    <li>Safari ❌</li>
+    <li>WebView Android ✅</li>
+    <li>Chrome Android ✅</li>
+    <li>Firefox for Android ✅</li>
+    <li>Opera Android ✅</li>
+    <li>Safari on iOS ❌</li>
+    <li>Samsung Internet ✅</li>
+</ul>

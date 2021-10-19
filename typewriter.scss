@@ -26,15 +26,19 @@
 }
 @mixin __typewriter-spread-styles($styles: (), $nth: null) {
 	@if type-of($styles) == list {
-		$all-props: __typewriter-get-all-keys($styles);
-		$styles: nth($styles, $nth);
-		@each $prop in $all-props {
-			$value: if(map-get($styles, $prop) == null, initial, map-get($styles, $prop));
-			#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
+		@if length($styles) > 0 {
+			$all-props: __typewriter-get-all-keys($styles);
+			$styles: nth($styles, $nth);
+			@each $prop in $all-props {
+				$value: if(map-get($styles, $prop) == null, initial, map-get($styles, $prop));
+				#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
+			}
 		}
 	} @else if type-of($styles) == map {
-		@each $prop, $value in $styles {
-			#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
+		@if length(map-keys($styles)) > 0 {
+			@each $prop, $value in $styles {
+				#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
+			}
 		}
 	} @else {
 		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps."
