@@ -9,7 +9,7 @@ The SCSS Typewriter is a fully functional typewriter mixin for SCSS.
 
 ```scss
 selector {
-	@include typewriter($string1 [, $string2, ..., $stringN, $speeds, $options]);
+    @include typewriter($string1 [, $string2, ..., $stringN, $speeds, $options]);
 }
 ```
 
@@ -31,10 +31,10 @@ To omit the `$speeds` object altogether and use the default speeds, either exclu
 
 ```scss
 $speeds: (
-	type: .1,
-	pause-typed: 2,
-	delete: .08,
-	pause-deleted: 1
+    type: .1,
+    pause-typed: 2,
+    delete: .08,
+    pause-deleted: 1
 );
 ```
 
@@ -42,11 +42,12 @@ Finally, the last parameter is the `$options` map object, for which the default 
 
 ```scss
 $options: (
-	name: "",
-	caret: true,
-	caret-speed: .75,
-	delay: 1,
-	iterations: infinite
+    name: "",
+    caret: true,
+    caret-speed: .75,
+    delay: 1,
+    iterations: infinite,
+    end-on: ""
 );
 ```
 
@@ -56,6 +57,7 @@ Properties of the `$options` map can only be overwridden using another object of
  - `caret-speed`: **(number)** This is the duration of one "blink" animation (in seconds) of the insertion cursor/caret when it has been enabled using the `caret` property. Like the `$speed` object values, these number values do not accept units.
  - `delay`: **(number)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
  - `iterations`: **(number)** This value determines how many times to loop the animation. This defaults to `infinite` to loop continuously. If a finite number is provided (e.g. `1`, `15`, etc.), the animation will repeat that many times and then type the first string again, at which point the typing animation will conclude, but the caret animation will continue if `caret` is enabled. The final typing animation of the first string is rendered via a separate animation that runs once the first full animation has completed all iterations.
+ - `end-on`: **(string/number)** This value is available for use ONLY when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
 
 ## Examples
 
@@ -76,11 +78,15 @@ Properties of the `$options` map can only be overwridden using another object of
 ```
 **Type three strings, disable the caret**
 ```scss
-@include typewriter("String 1", "String 2", "String 3", null, (caret: true));
+@include typewriter("String 1", "String 2", "String 3", null, (caret: false));
 ```
 **Type two strings, disable the caret, loop three times and end on the original string**
 ```scss
-@include typewriter("String 1", "String 2", null, (caret: true, iterations: 3));
+@include typewriter("String 1", "String 2", null, (caret: false, iterations: 3));
+```
+**Type two strings, iterating twice, then end on a custom string**
+```scss
+@include typewriter("String 1", "String 2", null, (iterations: 2, end-on: "Done!"));
 ```
 **Type two strings, provide a custom animation name**
 ```scss
@@ -95,4 +101,15 @@ Properties of the `$options` map can only be overwridden using another object of
 ```scss
 color: #f00;
 @include typewriter("String 1", "String 2");
+```
+**Type mid-string**
+(hint: it inherits the text color automatically using `currentColor`)
+```html
+<p>I am a developer and enjoy working with languages like <span class="typewriter"></span> in my spare time.</p>
+```
+```scss
+.typewriter {
+    color: #f00;
+    @include typewriter("String 1", "String 2");
+}
 ```
