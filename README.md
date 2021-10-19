@@ -1,9 +1,24 @@
 <div align="center">
 <h1>SCSS Typewriter</h1>
 The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href="https://codepen.io/brandonmcconnell/live/0aad0deb0d0a6f308b434309b9b6b93c" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
-![demonstration of SCSS typewriter in action](https://assets.codepen.io/1580009/typewriter-scss-bg.gif)</div>
+<img alt="demonstration of SCSS typewriter in action" src="https://assets.codepen.io/1580009/typewriter-scss-bg.gif" style="mix-blend-mode: screen;">
+</div>
 
-## Syntax
+#### Table of Contents
+<ul>
+    <li><a href="#syntax">Syntax</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li>
+        <a href="#examples">Examples</a>
+        <ul>
+            <li><a href="#basic-examples">Basic Examples</a></li>
+            <li><a href="#advanced-examples">Advanced Examples</a></li>
+        </ul>
+    </li>
+    <li><a href="#browser-support">Browser Support</a></li>
+</ul>
+
+<h2 id="syntax">Syntax</h2>
 
 ```scss
 selector {
@@ -11,7 +26,7 @@ selector {
 }
 ```
 
-## Usage
+<h2 id="usage">Usage</h2>
 
 The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. When the first non-string argument is encountered, is it assumed to be the `$speeds` object.
 
@@ -65,9 +80,9 @@ Properties of the `$options` map can only be overwridden using another object of
  - `iterations`: **(number)** This value determines how many times to loop the animation. This defaults to `infinite` to loop continuously. If a finite number is provided (e.g. `1`, `15`, etc.), the animation will repeat that many times and then type the first string again, at which point the typing animation will conclude, but the caret animation will continue if `caret` is enabled. The final typing animation of the first string is rendered via a separate animation that runs once the first full animation has completed all iterations.
  - `end-on`: **(string/number)** This string value will ONLY be rendered when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
 
-## Examples
+<h2 id="examples">Examples</h2>
 
-### Basic Examples
+<h3 id="basic-examples">Basic Examples</h3>
 
 Type a single string
 ```scss
@@ -119,7 +134,7 @@ Setting custom styles per string, and double the default typing speed by passing
 ), 2);
 ```
 
-### Advanced Examples
+<h3 id="advanced-examples">Advanced Examples</h3>
 
 Type mid-string, adding custom styles to text and caret
 ```html
@@ -171,3 +186,19 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
 ```scss
 @include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
+
+<h2 id="browser-support">Browser Support</h2>
+<ul>
+    <li>Chrome ✅</li>
+    <li>Edge ✅</li>
+    <li>Firefox ✅</li>
+    <li>Internet Explorer ✅</li>
+    <li>Opera ✅</li>
+    <li>Safari ❌</li>
+    <li>WebView Android ✅</li>
+    <li>Chrome Android ✅</li>
+    <li>Firefox for Android ✅</li>
+    <li>Opera Android ✅</li>
+    <li>Safari on iOS ❌</li>
+    <li>Samsung Internet ✅</li>
+</ul>
