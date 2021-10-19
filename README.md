@@ -2,8 +2,8 @@
 
 The SCSS Typewriter is a fully functional typewriter mixin for SCSS.
 
-![demonstration of SCSS typewriter in action](http://i.imgur.com/OUkLi.gif)
-<div align="center">[Live Demo](http://i.imgur.com/OUkLi.gif)</div>
+![demonstration of SCSS typewriter in action](https://assets.codepen.io/1580009/scss-typewriter.gif)
+<div align="center"><a href="https://codepen.io/brandonmcconnell/pen/0aad0deb0d0a6f308b434309b9b6b93c?editors=1100" target="_blank">Live Demo</a></div>
 
 ## Syntax
 
