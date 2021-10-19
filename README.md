@@ -142,8 +142,8 @@ Add custom styles per string including the closing `end-on` string, excluding ce
 @include typewriter(
     (
         "#1 String": (
-            color: blue,
-            font-family: ("Times New Roman", arial)
+            font-family: ("Times New Roman", arial),
+            color: blue
         ),
         "#2 String": (
             font-family: (consolas, monospace),
@@ -152,13 +152,12 @@ Add custom styles per string including the closing `end-on` string, excluding ce
             color: #0f0
         ),
         "#3 String": ()
-    ),
-    [.04, 1, .01, .3],
-    (
+    ), [null, .8, .01], (
         iterations: 2,
         end-on: ("#4 String - Ending": (
-            background: (#fff linear-gradient(to right, brown, green)),
-            color: blueviolet,
+            background: #fff linear-gradient(to right, cyan, yellow),
+            background-blend-mode: hard-light,
+            color: red,
             font-size: 120%
         )),
         caret-speed: .65,
