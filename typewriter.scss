@@ -30,11 +30,11 @@
 		$styles: nth($styles, $nth);
 		@each $prop in $all-props {
 			$value: if(map-get($styles, $prop) == null, initial, map-get($styles, $prop));
-			#{$prop}: if(type-of($value) == list, append($value, null, comma), $value);
+			#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
 		}
 	} @else if type-of($styles) == map {
 		@each $prop, $value in $styles {
-			#{$prop}: if(type-of($value) == list, append($value, null, comma), $value);
+			#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
 		}
 	} @else {
 		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps."
