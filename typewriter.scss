@@ -32,8 +32,8 @@
 	// 	content: $string;
 	// 	alt: "#{$alt-text}";
 	// }
-	content: $string;
-	content: $string / "#{$alt-text}";
+	content: "#{$string}";
+	content: "#{$string}" / "#{$alt-text}";
 	alt: "#{$alt-text}";
 }
 @mixin __typewriter-spread-styles($styles: (), $nth: null) {
@@ -56,13 +56,13 @@
 		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps."
 	}
 }
-@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $styles: ()) {
+@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $alt-text, $styles: ()) {
 	@keyframes #{$animation-name}-final {
 		@for $i from 1 through str-length($string) {
 			$modifier: .001;
 			@if $i == 1 { $modifier: 0; }
 			#{($i - 1) / str-length($string) * 100 + $modifier}%, #{$i / str-length($string) * 100}% {
-				@include __typewriter-alt-text(str-slice($string, 1, $i), $string);
+				@include __typewriter-alt-text(str-slice($string, 1, $i), $alt-text);
 				@include __typewriter-spread-styles($styles);
 			}
 		}
@@ -89,6 +89,7 @@ $__typewriter-id: 0;
 		delay: 1,
 		iterations: infinite,
 		end-on: ""
+		alt-text: ""
 	);
 	$stringsComplete: false;
 	$speedsComplete: false;
@@ -209,6 +210,7 @@ $__typewriter-id: 0;
 	$dur-done-gap: map-get($speeds, pause-deleted);
 	$animation-delay: map-get($options, delay);
 	$final-string: if(map-get($options, end-on) != "", map-get($options, end-on), nth($strings, 1));
+	$alt-text: if(map-get($options, alt-text) != "", map-get($options, alt-text), $final-string;
 	$caret-width: map-get($options, caret-width);
 	$caret-color: map-get($options, caret-color);
 	$caret-space: map-get($options, caret-space);
@@ -237,7 +239,7 @@ $__typewriter-id: 0;
 			+ $dur-full-gap + $dur-done-gap;
 	}
 	&::before {
-		@include __typewriter-alt-text("​", $final-string);
+		@include __typewriter-alt-text("​", $alt-text);
 		white-space: break-spaces;
 		@if $iterations == infinite {
 			animation: #{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards;
@@ -245,12 +247,12 @@ $__typewriter-id: 0;
 			animation:
 				#{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards,
 				#{$animation-name}-final #{str-length($final-string) * $dur-char-fwd}s linear #{$dur-total * $iterations + $animation-delay}s 1 forwards;
-			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $final-string-styles);
+			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $alt-text, $final-string-styles);
 		}
 	}
 	@if map-get($options, caret) {
 		&::after {
-			@include __typewriter-alt-text("​", $final-string);
+			@include __typewriter-alt-text("​", $alt-text);
 			position: relative;
 			display: inline-block;
 			padding-right: $caret-space;
@@ -266,20 +268,20 @@ $__typewriter-id: 0;
 				@if $j < str-length(nth($strings, $i)) * 2 {
 					#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
 						@if $j <= str-length(nth($strings, $i)) {
-							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, $j)}), $final-string);
+							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, $j)}), $alt-text);
 						} @else {
-							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))}), $final-string);
+							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))}), $alt-text);
 						}
 						@include __typewriter-spread-styles($strings-styles, $i);
 					}
 				} @else {
 					@if $i < length($strings) {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i+1, 1, -.001)} {
-							@include __typewriter-alt-text("​", $final-string);
+							@include __typewriter-alt-text("​", $alt-text);
 						}
 					} @else {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, 100% {
-							@include __typewriter-alt-text("​", $final-string);
+							@include __typewriter-alt-text("​", $alt-text);
 						}
 					}
 				}
