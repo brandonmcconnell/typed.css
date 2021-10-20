@@ -24,13 +24,22 @@
 	}
 	@return $all-keys;
 }
+@mixin __typewriter-alt-text($string, $alt-text) {
+	@supports (content: "x" / "y") {
+		content: $string / "#{$alt-text}";
+	}
+	@supports not (content: "x" / "y") {
+		content: $string;
+		alt: "#{$alt-text}";
+	}
+}
 @mixin __typewriter-spread-styles($styles: (), $nth: null) {
 	@if type-of($styles) == list {
 		@if length($styles) > 0 {
 			$all-props: __typewriter-get-all-keys($styles);
 			$styles: nth($styles, $nth);
 			@each $prop in $all-props {
-				$value: if(map-get($styles, $prop) == null, initial, map-get($styles, $prop));
+				$value: if(map-get($styles, $prop) == null, unset, map-get($styles, $prop));
 				#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
 			}
 		}
@@ -50,7 +59,7 @@
 			$modifier: .001;
 			@if $i == 1 { $modifier: 0; }
 			#{($i - 1) / str-length($string) * 100 + $modifier}%, #{$i / str-length($string) * 100}% {
-				content: str-slice($string, 1, $i);
+				@include __typewriter-alt-text(str-slice($string, 1, $i), $string);
 				@include __typewriter-spread-styles($styles);
 			}
 		}
@@ -225,8 +234,8 @@ $__typewriter-id: 0;
 			+ $dur-full-gap + $dur-done-gap;
 	}
 	&::before {
-		content: "​";
-		white-space: pre;
+		@include __typewriter-alt-text("​", $final-string);
+		white-space: break-spaces;
 		@if $iterations == infinite {
 			animation: #{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards;
 		} @else {
@@ -238,7 +247,7 @@ $__typewriter-id: 0;
 	}
 	@if map-get($options, caret) {
 		&::after {
-			content: "​";
+			@include __typewriter-alt-text("​", $final-string);
 			position: relative;
 			display: inline-block;
 			padding-right: $caret-space;
@@ -254,20 +263,20 @@ $__typewriter-id: 0;
 				@if $j < str-length(nth($strings, $i)) * 2 {
 					#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
 						@if $j <= str-length(nth($strings, $i)) {
-							content: quote(#{str-slice(nth($strings, $i), 1, $j)});
+							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, $j)}), $final-string);
 						} @else {
-							content: quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))});
+							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))}), $final-string);
 						}
 						@include __typewriter-spread-styles($strings-styles, $i);
 					}
 				} @else {
 					@if $i < length($strings) {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i+1, 1, -.001)} {
-							content: "​";
+							@include __typewriter-alt-text("​", $final-string);
 						}
 					} @else {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, 100% {
-							content: "​";
+							@include __typewriter-alt-text("​", $final-string);
 						}
 					}
 				}
