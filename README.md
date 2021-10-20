@@ -29,7 +29,7 @@ selector {
 
 <h2 id="usage">Usage</h2>
 
-The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. When the first non-string argument is encountered, is it assumed to be the `$speeds` object.
+The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. To specify per-string styles, use a single `$strings` map object with the strings as the keys and the styles for each set as a map object as well, as the value. When the first non-string argument is encountered, or after the `$strings` map has been computed and the next argument is met, it is assumed to be the `$speeds` object.
 
 The `$speeds` object can be either a map with named properties matching any of the four valid speed properties— `type`, `pause-typed`, `delete`, and `pause-deleted`, a list of the values for each of those properties in that same order, a positive number (integer or float) which will act as a multiplier for the default speeds, or null, which will fall back to the default speeds when used. The `$speeds` argument is entirely optional and can be omitted, so `null` only needs to be passed for this argumment when wanting to use the default speeds but also set configuration options using the next `$options` argument. Passing `1` or `null` will have the same effect, as `1` will simply multiply the default values by 1, resulting in the same default values.
 
@@ -80,6 +80,7 @@ Properties of the `$options` map can only be overwridden using another object of
  - `delay`: **(number)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
  - `iterations`: **(number)** This value determines how many times to loop the animation. This defaults to `infinite` to loop continuously. If a finite number is provided (e.g. `1`, `15`, etc.), the animation will repeat that many times and then type the first string again, at which point the typing animation will conclude, but the caret animation will continue if `caret` is enabled. The final typing animation of the first string is rendered via a separate animation that runs once the first full animation has completed all iterations.
  - `end-on`: **(string/number)** This string value will ONLY be rendered when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
+ - `alt-text`: **(string)** This string will be used to add alt text to the pseudo `::before` element for accessibility. When unset, this property will—by default—fall back to the value stored in `end-on`. If `end-on` is also unset, both values will default to the value of the first string passed to the typewriter mixin.
 
 <h2 id="examples">Examples</h2>
 
