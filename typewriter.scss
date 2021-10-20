@@ -32,8 +32,8 @@
 	// 	content: $string;
 	// 	alt: "#{$alt-text}";
 	// }
-	content: $string;
-	content: $string / "#{$alt-text}";
+	content: "#{$string}";
+	content: "#{$string}" / "#{$alt-text}";
 	alt: "#{$alt-text}";
 }
 @mixin __typewriter-spread-styles($styles: (), $nth: null) {
