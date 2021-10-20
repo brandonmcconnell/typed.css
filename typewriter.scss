@@ -25,13 +25,16 @@
 	@return $all-keys;
 }
 @mixin __typewriter-alt-text($string, $alt-text) {
-	@supports (content: "x" / "y") {
-		content: $string / "#{$alt-text}";
-	}
-	@supports not (content: "x" / "y") {
-		content: $string;
-		alt: "#{$alt-text}";
-	}
+	// @supports (content: "x" / "y") {
+	// 	content: $string / "#{$alt-text}";
+	// }
+	// @supports not (content: "x" / "y") {
+	// 	content: $string;
+	// 	alt: "#{$alt-text}";
+	// }
+	content: $string;
+	content: $string / "#{$alt-text}";
+	alt: "#{$alt-text}";
 }
 @mixin __typewriter-spread-styles($styles: (), $nth: null) {
 	@if type-of($styles) == list {
