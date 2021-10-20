@@ -210,7 +210,7 @@ $__typewriter-id: 0;
 	$dur-done-gap: map-get($speeds, pause-deleted);
 	$animation-delay: map-get($options, delay);
 	$final-string: if(map-get($options, end-on) != "", map-get($options, end-on), nth($strings, 1));
-	$alt-text: if(map-get($options, alt-text) != "", map-get($options, alt-text), $final-string;
+	$alt-text: if(map-get($options, alt-text) != "", map-get($options, alt-text), $final-string);
 	$caret-width: map-get($options, caret-width);
 	$caret-color: map-get($options, caret-color);
 	$caret-space: map-get($options, caret-space);
