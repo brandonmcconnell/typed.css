@@ -56,7 +56,7 @@
 		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps."
 	}
 }
-@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $alt-text, $styles: ()) {
+@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $alt-text, $prefix, $styles: ()) {
 	@keyframes #{$animation-name}-final {
 		@for $i from 1 through str-length($string) {
 			$modifier: .001;
@@ -285,7 +285,7 @@ $__typewriter-id: 0;
 			animation:
 				#{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards,
 				#{$animation-name}-final #{str-length($final-string) * $dur-char-fwd}s linear #{$dur-total * $iterations + $animation-delay}s 1 forwards;
-			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $alt-text, $final-string-styles);
+			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $alt-text, $prefix, $final-string-styles);
 		}
 	}
 	@if map-get($options, caret) {
