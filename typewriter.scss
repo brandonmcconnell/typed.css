@@ -1,30 +1,48 @@
-@function __typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $string, $letter, $modifier) {
-	$strings-past: $string - 1; $time: 0;
+$__typewriter-pauses-chars: (fwd: "\200b", bwd: "\200c", both: "\feff");
+@function __typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $string-nth, $char-nth, $modifier) {
+	$string: nth($strings, $string-nth);
+	$length: str-length($string);
+	$fwd-string: __typewriter-remove-bwd-pause-chars($string);
+	$fwd-length: str-length($fwd-string);
+	$bwd-string: __typewriter-remove-fwd-pause-chars($string);
+	$bwd-length: str-length($bwd-string);
+	$combined-length: $fwd-length + $bwd-length;
+	$strings-past: $string-nth - 1;
+	$time: 0;
 	@while $strings-past > 0 {
+		$past-string: nth($strings, $strings-past);
+		$past-length: str-length($past-string);
+		$past-fwd-length: str-length(__typewriter-remove-bwd-pause-chars($past-string));
+		$past-bwd-length: str-length(__typewriter-remove-fwd-pause-chars($past-string));
 		$time: $time
-			+ (($dur-char-fwd + $dur-char-bwd) * (str-length(nth($strings, $strings-past))))
+			+ $dur-char-fwd * $past-fwd-length
+			+ $dur-char-bwd * $past-bwd-length
 			+ $dur-full-gap + $dur-done-gap;
 		$strings-past: $strings-past - 1;
 	}
-	@if $letter <= str-length(nth($strings, $string)) {
+	@if $char-nth <= $fwd-length {
 		$time: $time
-			+ ($dur-char-fwd * ($letter - 1));
+			+ $dur-char-fwd * ($char-nth - 1);
 	} @else {
 		$time: $time
-			+ ($dur-char-fwd * str-length(nth($strings, $string)))
+			+ $dur-char-fwd * $fwd-length
 			+ $dur-full-gap
-			+ ($dur-char-bwd * ($letter - str-length(nth($strings, $string))));
+			+ $dur-char-bwd * ($char-nth - $fwd-length);
 	}
 	@return ($time / $dur-total * 100 + $modifier) + "%";
 }
-@function __typewriter-get-all-keys($list) {
+@function __typewriter-get-all-keys($lists...) {
 	$all-keys: ();
-	@each $map in $list {
-		$all-keys: join($all-keys, map-keys($map));
+	@each $list in $lists {
+		@each $map in $list {
+			@each $prop in map-keys($map) {
+				$all-keys: append($all-keys, $prop, comma);
+			}
+		}
 	}
 	@return $all-keys;
 }
-@mixin __typewriter-alt-text($string, $alt-text, $prefix: "") {
+@mixin __typewriter-write-to-content($string, $alt-text, $prefix: "") {
 	// @supports (content: "x" / "y") {
 	// 	content: $string / "#{$alt-text}";
 	// }
@@ -32,15 +50,21 @@
 	// 	content: $string;
 	// 	alt: "#{$alt-text}";
 	// }
-	content: "​#{$prefix}#{$string}";
-	content: "​#{$prefix}#{$string}" / "#{$alt-text}";
-	alt: "#{$alt-text}";
+	content: "​#{__typewriter-sanitize-pause-chars($prefix)}#{__typewriter-sanitize-pause-chars($string)}";
+	content: "​#{__typewriter-sanitize-pause-chars($prefix)}#{__typewriter-sanitize-pause-chars($string)}" / "#{__typewriter-sanitize-pause-chars($alt-text)}";
+	alt: "#{__typewriter-sanitize-pause-chars($alt-text)}";
 }
-@mixin __typewriter-spread-styles($styles: (), $nth: null) {
+@mixin __typewriter-spread-styles($styles: (), $nth: null, $addtl-styles...) {
 	@if type-of($styles) == list {
-		@if length($styles) > 0 {
-			$all-props: __typewriter-get-all-keys($styles);
-			$styles: nth($styles, $nth);
+		@if (length($styles) > 0 and $nth != null) or length($addtl-styles) > 0 {
+			$all-props: __typewriter-get-all-keys($styles, $addtl-styles);
+			@if length($styles) > 0 and $nth != null { $styles: nth($styles, $nth); }
+			@if length($addtl-styles) > 0 {
+				@each $style-group in $addtl-styles {
+					// @error "#{$style-group}";
+					$styles: map-merge($styles, $style-group);
+				}
+			}
 			@each $prop in $all-props {
 				$value: if(map-get($styles, $prop) == null, unset, map-get($styles, $prop));
 				#{$prop}: if(type-of($value) == list, append($value, null, auto), $value);
@@ -53,47 +77,98 @@
 			}
 		}
 	} @else {
-		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps."
+		@error "__typewriter-spread-styles requires the $styles argument to be either a map or a list of maps.";
 	}
 }
-@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $alt-text, $prefix, $styles: ()) {
+@mixin __typewriter-final-build-animation($dur-char-fwd, $string, $animation-name, $alt-text, $prefix, $end-styles: (), $styles: ()) {
 	@keyframes #{$animation-name}-final {
 		@for $i from 1 through str-length($string) {
 			$modifier: .001;
 			@if $i == 1 { $modifier: 0; }
 			#{($i - 1) / str-length($string) * 100 + $modifier}%, #{$i / str-length($string) * 100}% {
-				@include __typewriter-alt-text(str-slice($string, 1, $i), $alt-text, $prefix);
-				@include __typewriter-spread-styles($styles);
+				@include __typewriter-write-to-content(str-slice($string, 1, $i), $alt-text, $prefix);
+				@if $i == str-length($string) {
+					@include __typewriter-spread-styles(map-merge($styles, $end-styles));
+				} @else {
+					@include __typewriter-spread-styles($styles);
+				}
 			}
 		}
 	}
 }
-// to-length and to-number functions are courtesy of Hugo Giraudel (hugogiraudel.com)
-@function __typewriter-to-length($value, $unit) {
-	$units: ("px": 1px, "cm": 1cm, "mm": 1mm, "%": 1%, "ch": 1ch, "pc": 1pc, "in": 1in, "em": 1em, "rem": 1rem, "pt": 1pt, "ex": 1ex, "vw": 1vw, "vh": 1vh, "vmin": 1vmin, "vmax": 1vmax);
-	@if not index(map-keys($units), $unit) { $_: log("Invalid unit `#{$unit}`."); }
-	@return $value * map-get($units, $unit);
+@function __typewriter-instances-of($data, $search) {
+	$instances: 0;
+	@if type-of($data) == list or type-of($data) == map { @each $item in $data { @if $item == $search { $instances: $instances + 1; } } }
+	@else if type-of($data) == string {
+		@if type-of($search) != string { @error "When searching a string using instances-of, your search argument must also be a string."; }
+		@if str-length($search) < 1 { @error "When searching a string using instances-of, your search string must be at least one character in length."; }
+		@for $i from 1 through str-length($data) - str-length($search) + 1 { @if str-slice($data, $i, $i + str-length($search) - 1) == $search { $instances: $instances + 1; } }
+	} @else { @error "instances-of requires one parameter of type map, list, or string, and a second argument of the value searching for within that data."; }
+	@return $instances;
 }
-@function __typewriter-to-number($value) {
-	@if type-of($value) == "number" { @return $value; }
-	@else if type-of($value) != "string" { $_: log("Value for `__typewriter-to-number` should be a number or a string."); }
-	$result: 0; $digits: 0; $minus: str-slice($value, 1, 1) == "-"; $numbers: ("0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9);
-	@for $i from if($minus, 2, 1) through str-length($value) {
-		$character: str-slice($value, $i, $i);
-		@if not (index(map-keys($numbers), $character) or $character == ".") { @return __typewriter-to-length(if($minus, -$result, $result), str-slice($value, $i)) }
-		@if $character == "." { $digits: 1; }
-		@else if $digits == 0 { $result: $result * 10 + map-get($numbers, $character); }
-		@else { $digits: $digits * 10; $result: $result + map-get($numbers, $character) / $digits; }
-	}
-	@return if($minus, -$result, $result);;
+@function __typewriter-instances-of-not($data, $search) {
+	@if type-of($data) == list or type-of($data) == map { @return length($data) - __typewriter-instances-of($data, $search); }
+	@else if type-of($data) == string { @return str-length($data) - __typewriter-instances-of($data, $search); }
+	@else { @error "instances-of requires one parameter of type map, list, or string, and a second argument of the value searching for within that data."; }
 }
-@function __typewriter-inject-pauses($str) {
+// ...
+//
+// CREDIT BEGIN :: aliased str-replace/to-length/to-number functions are courtesy of Kitty Giraudel (kittygiraudel.com)
+			@function __typewriter-str-replace($string, $search, $replace: "") {
+				$index: str-index($string, $search);
+				@if $index { @return str-slice($string, 1, $index - 1) + $replace + __typewriter-str-replace(str-slice($string, $index + str-length($search)), $search, $replace); }
+				@return $string;
+			}
+			@function __typewriter-to-length($value, $unit) {
+				$units: ("px": 1px, "cm": 1cm, "mm": 1mm, "%": 1%, "ch": 1ch, "pc": 1pc, "in": 1in, "em": 1em, "rem": 1rem, "pt": 1pt, "ex": 1ex, "vw": 1vw, "vh": 1vh, "vmin": 1vmin, "vmax": 1vmax);
+				@if not index(map-keys($units), $unit) { $_: log("Invalid unit `#{$unit}`."); }
+				@return $value * map-get($units, $unit);
+			}
+			@function __typewriter-to-number($value) {
+				@if type-of($value) == "number" { @return $value; }
+				@else if type-of($value) != "string" { $_: log("Value for `__typewriter-to-number` should be a number or a string."); }
+				$result: 0; $digits: 0; $minus: str-slice($value, 1, 1) == "-"; $numbers: ("0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9);
+				@for $i from if($minus, 2, 1) through str-length($value) {
+					$character: str-slice($value, $i, $i);
+					@if not (index(map-keys($numbers), $character) or $character == ".") { @return __typewriter-to-length(if($minus, -$result, $result), str-slice($value, $i)) }
+					@if $character == "." { $digits: 1; }
+					@else if $digits == 0 { $result: $result * 10 + map-get($numbers, $character); }
+					@else { $digits: $digits * 10; $result: $result + map-get($numbers, $character) / $digits; }
+				}
+				@return if($minus, -$result, $result);
+			}
+// CREDIT END
+//
+// ...
+@function __typewriter-str-replace-multi($string, $searches, $replace: "") {
+	@each $search in $searches { $string: __typewriter-str-replace($string, $search, $replace); }
+	@return $string;
+}
+@function __typewriter-remove-pause-chars($str) { @return __typewriter-str-replace-multi($str, map-values($__typewriter-pauses-chars)); }
+@function __typewriter-remove-fwd-pause-chars($str) { @return __typewriter-str-replace($str, map-get($__typewriter-pauses-chars, fwd)); }
+@function __typewriter-remove-bwd-pause-chars($str) { @return __typewriter-str-replace($str, map-get($__typewriter-pauses-chars, bwd)); }
+@function __typewriter-remove-both-pause-chars($str) { @return __typewriter-str-replace($str, map-get($__typewriter-pauses-chars, both)); }
+@function __typewriter-sanitize-pause-chars($str) { @return __typewriter-remove-pause-chars(__typewriter-inject-pauses($str)); }
+@function __typewriter-inject-pauses($str, $default-mode: "fwd") {
 	@while str-index($str, "<[") != null and str-index($str, "]>") != null and str-index($str, "]>") > str-index($str, "<[") {
-		$start: str-index($str, "<[");
-		$end: str-index($str, "]>");
-		$value: __typewriter-to-number(str-slice($str, $start + 2, $end - 1));
-		$spaces: ""; @for $i from 0 to $value { $spaces: $spaces + "\200b"; }
-		$str: str-slice($str, 0, $start - 1) + $spaces + str-slice($str, $end + 2, -1);
+		$start: str-index($str, "<["); $end: str-index($str, "]>");
+		$is-fwd: str-slice($str, $start + 2, $start + 2) == "_";
+		$is-bwd: str-slice($str, $end - 1, $end - 1) == "_";
+		$is-both: $is-fwd and $is-bwd;
+		$space-char:
+			if($is-both,
+				map-get($__typewriter-pauses-chars, both),
+				if($is-bwd,
+					map-get($__typewriter-pauses-chars, bwd),
+					if($is-fwd,
+						map-get($__typewriter-pauses-chars, fwd),
+						$default-mode
+					)
+				)
+			);
+		$value: __typewriter-to-number(str-slice($str, $start + if($is-fwd, 3, 2), $end - if($is-bwd, 2, 1)));
+		$spaces: ""; @for $i from 0 to $value { $spaces: $spaces + $space-char; }
+		$str: str-slice($str, 1, $start - 1) + $spaces + str-slice($str, $end + 2, -1);
 	}
 	@return $str;
 }
@@ -110,14 +185,17 @@ $__typewriter-id: 0;
 	);
 	$options: (
 		name: "",
+		iterations: infinite,
 		caret: true,
 		caret-speed: .75,
 		caret-width: 1ch,
 		caret-color: currentColor,
 		caret-space: .1ch,
+		styles: (),
+		end-styles: (),
 		delay: 1,
 		type-pausing: true,
-		iterations: infinite,
+		type-pausing-default: "fwd",
 		prefix: "",
 		end-on: "",
 		alt-text: ""
@@ -135,7 +213,7 @@ $__typewriter-id: 0;
 			} @else if type-of($parameter) == string {
 				$strings: append($strings, $parameter);
 			} @else {
-				@error "Strings are required in the formats of either separate sequential string arguments, or a single map with each string represented as the key of its own map of associated styles."
+				@error "Strings are required in the formats of either separate sequential string arguments, or a single map with each string represented as the key of its own map of associated styles.";
 			}
 			@if length($parameters) > $parameter-nth and type-of(nth($parameters, $parameter-nth + 1)) != string {
 				$strings-complete: true;
@@ -220,6 +298,14 @@ $__typewriter-id: 0;
 						@if $value != currentColor and type-of($value) != color {
 							@error "The caret-color property requires a value of type color, or currentColor.";
 						}
+					} @else if ($key == styles or $key == end-styles) and not type-of($value) != map {
+						@if type-of($value) != map {
+							@error "The #{$key} property requires a value of type map.";
+						}
+					} @else if $key == type-pausing-default {
+						@if type-of($value) != string or ($value != "fwd" and $value != "bwd" and $value != "both") {
+							@error "The #{$key} property requires a value of either \"fwd\", \"bwd\", or \"both\".";
+						}
 					} @else if type-of($value) != type-of(map-get($options, $key)) {
 						@error "The #{$key} value #{$value} of type #{type-of($value)} does not match the required type #{type-of(map-get($options, $key))}.";
 					}
@@ -246,11 +332,14 @@ $__typewriter-id: 0;
 	$caret-color: map-get($options, caret-color);
 	$caret-space: map-get($options, caret-space);
 	$caret-speed: map-get($options, caret-speed);
+	$global-styles: map-get($options, styles);
+	$end-styles: map-get($options, end-styles);
 	$type-pausing: map-get($options, type-pausing);
+	$type-pausing-default: map-get($options, type-pausing-default);
 	$prefix: map-get($options, prefix);
 	@if $type-pausing {
 		@for $nth from 1 through length($strings) {
-			$strings: set-nth($strings, $nth, __typewriter-inject-pauses(nth($strings, $nth)));
+			$strings: set-nth($strings, $nth, __typewriter-inject-pauses(nth($strings, $nth), $type-pausing-default));
 		}
 	}
 	@if $caret-speed < 0s {
@@ -268,16 +357,18 @@ $__typewriter-id: 0;
 		$animation-name: typewriter-#{$__typewriter-id};
 		$__typewriter-id: $__typewriter-id + 1 !global;
 	}
-	$charCount: 0;
 	$dur-total: 0;
 	@each $string in $strings {
-		$charCount: $charCount + str-length($string);
+		$fwd-length: str-length(__typewriter-remove-bwd-pause-chars($string));
+		$bwd-length: str-length(__typewriter-remove-fwd-pause-chars($string));
 		$dur-total: $dur-total
-			+ (str-length($string) * ($dur-char-fwd + $dur-char-bwd))
-			+ $dur-full-gap + $dur-done-gap;
+			+ $dur-char-fwd * $fwd-length
+			+ $dur-full-gap
+			+ $dur-char-bwd * $bwd-length
+			+ $dur-done-gap
 	}
 	&::before {
-		@include __typewriter-alt-text("", $alt-text, $prefix);
+		@include __typewriter-write-to-content("", $alt-text, $prefix);
 		white-space: break-spaces;
 		@if $iterations == infinite {
 			animation: #{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards;
@@ -285,12 +376,12 @@ $__typewriter-id: 0;
 			animation:
 				#{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards,
 				#{$animation-name}-final #{str-length($final-string) * $dur-char-fwd}s linear #{$dur-total * $iterations + $animation-delay}s 1 forwards;
-			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $alt-text, $prefix, $final-string-styles);
+			@include __typewriter-final-build-animation($dur-char-fwd, $final-string, $animation-name, $alt-text, $prefix, $end-styles, map-merge($global-styles, $final-string-styles));
 		}
 	}
 	@if map-get($options, caret) {
 		&::after {
-			@include __typewriter-alt-text("", $alt-text, $prefix);
+			content: "​";
 			position: relative;
 			display: inline-block;
 			padding-right: $caret-space;
@@ -302,24 +393,32 @@ $__typewriter-id: 0;
 	// now THIS is where the magic happens... ✨
 	@keyframes #{$animation-name} {
 		@for $i from 1 through length($strings) {
-			@for $j from 1 through (str-length(nth($strings, $i)) * 2) {
-				@if $j < str-length(nth($strings, $i)) * 2 {
+			$string: nth($strings, $i);
+			$fwd-string: __typewriter-remove-bwd-pause-chars($string);
+			$fwd-length: str-length($fwd-string);
+			$bwd-string: __typewriter-remove-fwd-pause-chars($string);
+			$bwd-length: str-length($bwd-string);
+			$combined-length: $fwd-length + $bwd-length;
+			@for $j from 1 through $combined-length {
+				@if $j < $combined-length {
 					#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
-						@if $j <= str-length(nth($strings, $i)) {
-							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, $j)}), $alt-text, $prefix);
+						@if $j <= $fwd-length {
+							@include __typewriter-write-to-content(quote(#{str-slice($fwd-string, 1, $j)}), $alt-text, $prefix);
 						} @else {
-							@include __typewriter-alt-text(quote(#{str-slice(nth($strings, $i), 1, str-length(nth($strings, $i)) - ($j - str-length(nth($strings, $i))))}), $alt-text, $prefix);
+							@include __typewriter-write-to-content(quote(#{str-slice($bwd-string, 1, $bwd-length - ($j - $fwd-length))}), $alt-text, $prefix);
 						}
-						@include __typewriter-spread-styles($strings-styles, $i);
+						@include __typewriter-spread-styles($strings-styles, $i, $global-styles);
 					}
 				} @else {
 					@if $i < length($strings) {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i+1, 1, -.001)} {
-							@include __typewriter-alt-text("", $alt-text, $prefix);
+							@include __typewriter-write-to-content("", $alt-text, $prefix);
+							@include __typewriter-spread-styles($strings-styles, $i, $global-styles);
 						}
 					} @else {
 						#{__typewriter-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, 100% {
-							@include __typewriter-alt-text("", $alt-text, $prefix);
+							@include __typewriter-write-to-content("", $alt-text, $prefix);
+							@include __typewriter-spread-styles($strings-styles, $i, $global-styles);
 						}
 					}
 				}
