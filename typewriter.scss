@@ -162,7 +162,7 @@ $__typewriter-pauses-chars: (fwd: "\200b", bwd: "\200c", both: "\feff");
 					map-get($__typewriter-pauses-chars, bwd),
 					if($is-fwd,
 						map-get($__typewriter-pauses-chars, fwd),
-						$default-mode
+						map-get($__typewriter-pauses-chars, $default-mode)
 					)
 				)
 			);
@@ -370,6 +370,7 @@ $__typewriter-id: 0;
 	&::before {
 		@include __typewriter-write-to-content("", $alt-text, $prefix);
 		white-space: break-spaces;
+		will-change: content;
 		@if $iterations == infinite {
 			animation: #{$animation-name} #{$dur-total}s linear #{$animation-delay}s #{$iterations} forwards;
 		} @else {
