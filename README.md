@@ -19,7 +19,15 @@ The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href=
     <li><a href="#credits">Credits</a></li>
 </ul>
 
+<h2 id="installation">Installation</h2>
+
+```scss
+@import 'typewriter';
+```
+
 <h2 id="syntax">Syntax</h2>
+
+**General syntax**
 
 ```scss
 selector {
@@ -27,9 +35,17 @@ selector {
 }
 ```
 
+**Advanced syntax**
+
+```scss
+selector {
+    @include typewriter($strings [, $speeds, $options]);
+}
+```
+
 <h2 id="usage">Usage</h2>
 
-The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. To specify per-string styles, use a single `$strings` map object with the strings as the keys and the styles for each set as a map object as well, as the value. When the first non-string argument is encountered, or after the `$strings` map has been computed and the next argument is met, it is assumed to be the `$speeds` object.
+The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. To specify per-string styles, use a single `$strings` map object with the strings as the keys and the styles for each set as the value, where the style sub-map consists of CSS property names as keys and their associated values as the map values. When the first non-string argument is encountered, or after the `$strings` map has been computed and the next argument is met, it is assumed to be the `$speeds` object.
 
 The `$speeds` object can be either a map with named properties matching any of the four valid speed properties— `type`, `pause-typed`, `delete`, and `pause-deleted`, a list of the values for each of those properties in that same order, a positive number (integer or float) which will act as a multiplier for the default speeds, or null, which will fall back to the default speeds when used. The `$speeds` argument is entirely optional and can be omitted, so `null` only needs to be passed for this argumment when wanting to use the default speeds but also set configuration options using the next `$options` argument. Passing `1` or `null` will have the same effect, as `1` will simply multiply the default values by 1, resulting in the same default values.
 
@@ -81,7 +97,8 @@ Properties of the `$options` map can only be overwridden using another object of
  - `styles`: **(map)** Any styles added to this map are displayed across all strings including the `end-on` string.
  - `end-styles`: **(map)** Any styles added to this map are displayed at the end of the animation once all iterations including the `end-on` string have completed their animations. These styles will not be rendered if the animation is set to loop continuously.
  - `delay`: **(number)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
- - `type-pausing`: **(boolean)** This boolean value determines whether the current typewriter will replace any/all instances of the special "pause" syntax within its strings with a pause for the duration of however long it would take to type the number of characters indicated by its contained value. This property is set to true by default. The type-pause syntax is `<[INTEGER]>`. When enabled, a given string `Be right <[3]>there.` the total time it would take to animate the string forward would be the current `type` speed duration * 18. The 18 character-durations is comprised of three parts: `Be right ` (9 chars), `<[3]>` (same time as 3 chars), and `there.` (6 chars). 9+3+6=18
+ - `type-pausing`: **(boolean)** This boolean value determines whether the current typewriter will replace any/all instances of the special "pause" syntax within its strings with a pause for the duration of however long it would take to type the number of characters indicated by its contained value. This property is set to true by default. The type-pause syntax is `<[INTEGER]>`. When enabled, a given string `Be right <[3]>there.` the total time it would take to animate the string forward would be the current `type` speed duration * 18. The 18 character-durations is comprised of three parts: `Be right ` (9 chars), `<[3]>` (same time as 3 chars), and `there.` (6 chars). 9+3+6=18. To specify a specific direction for a type-pause (e.g. forward, backward, or both), include an underscore next to the number within the special syntax, left-side for forward, right-sie for backward, and an underscore on each side for pausing in both direction. By default, pauses without an underscore only pause in the forward direction, but this defaukt setting can be adjusted using the `type-pausing-default` property.
+- `type-pausing-default`: **(string)** This string property accepts the values `fwd` (default), `bwd`, and `both` to set the default direction type-pauses set without the directional underscore are paused.
  - `prefix`: **(string)** This string will displays at the beginning of each typed string and will NOT be included in the animation of the text itself. It's important to note that if you set per-string styles, they cause undesirable effects to the prefix, causing its style to change instantly between strings. In this case, opt to place any prefix/suffix strings outside the animated text element altogether.
  - `end-on`: **(string/number)** This string value will ONLY be rendered when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
  - `alt-text`: **(string)** This string will be used to add alt text to the pseudo `::before` element for accessibility. When unset, this property will—by default—fall back to the value stored in `end-on`. If `end-on` is also unset, both values will default to the value of the first string passed to the typewriter mixin.
