@@ -1,7 +1,7 @@
 <div align="center">
-<h1>SCSS Typewriter</h1>
-The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href="http://typedcss.com/" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
-<img alt="demonstration of SCSS typewriter in action" src="https://assets.codepen.io/1580009/typewriter-scss-bg.png" style="mix-blend-mode: screen;">
+<h1>Typed.css</h1>
+Typed.css is a fully functional typewriter mixin for CSS preprocessors, currently supporting in SCSS, and soon adding support for Less and Stylus as well.<br><a href="http://typedcss.com/" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
+<img alt="demonstration of Typed.css in action" src="https://assets.codepen.io/1580009/typewriter-scss-bg.png" style="mix-blend-mode: screen;">
 </div>
 
 #### Table of Contents
@@ -228,4 +228,4 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
 
 <h2 id="credits">Credits</h2>
 <p>Hi there, I'm Brandon! 👨🏻‍💻</p>
-<p>It's nioce to meet you. So far, SCSS Typewriter has been a one-man show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in the effort to grow this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
+<p>It's nioce to meet you. So far, Typed.css has been a one-man show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in the effort to grow this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
