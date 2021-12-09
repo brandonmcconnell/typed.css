@@ -1,6 +1,6 @@
 <div align="center">
 <h1>SCSS Typewriter</h1>
-The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href="https://codepen.io/brandonmcconnell/live/0aad0deb0d0a6f308b434309b9b6b93c" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
+The SCSS Typewriter is a fully functional typewriter mixin for SCSS.<br><a href="http://typedcss.com/" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
 <img alt="demonstration of SCSS typewriter in action" src="https://assets.codepen.io/1580009/typewriter-scss-bg.png" style="mix-blend-mode: screen;">
 </div>
 
