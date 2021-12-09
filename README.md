@@ -22,7 +22,7 @@ Typed.css is a fully functional typewriter mixin for CSS preprocessors, currentl
 <h2 id="installation">Installation</h2>
 
 ```scss
-@import 'typewriter';
+@import 'typed';
 ```
 
 <h2 id="syntax">Syntax</h2>
@@ -31,7 +31,7 @@ Typed.css is a fully functional typewriter mixin for CSS preprocessors, currentl
 
 ```scss
 selector {
-    @include typewriter($string1 [, $string2, ..., $stringN, $speeds, $options]);
+    @include typed($string1 [, $string2, ..., $stringN, $speeds, $options]);
 }
 ```
 
@@ -39,13 +39,13 @@ selector {
 
 ```scss
 selector {
-    @include typewriter($strings [, $speeds, $options]);
+    @include typed($strings [, $speeds, $options]);
 }
 ```
 
 <h2 id="usage">Usage</h2>
 
-The `typewriter` mixin requires at least one string argument and accepts any number of string arguments. To specify per-string styles, use a single `$strings` map object with the strings as the keys and the styles for each set as the value, where the style sub-map consists of CSS property names as keys and their associated values as the map values. When the first non-string argument is encountered, or after the `$strings` map has been computed and the next argument is met, it is assumed to be the `$speeds` object.
+The `typed` mixin requires at least one string argument and accepts any number of string arguments. To specify per-string styles, use a single `$strings` map object with the strings as the keys and the styles for each set as the value, where the style sub-map consists of CSS property names as keys and their associated values as the map values. When the first non-string argument is encountered, or after the `$strings` map has been computed and the next argument is met, it is assumed to be the `$speeds` object.
 
 The `$speeds` object can be either a map with named properties matching any of the four valid speed properties— `type`, `pause-typed`, `delete`, and `pause-deleted`, a list of the values for each of those properties in that same order, a positive number (integer or float) which will act as a multiplier for the default speeds, or null, which will fall back to the default speeds when used. The `$speeds` argument is entirely optional and can be omitted, so `null` only needs to be passed for this argumment when wanting to use the default speeds but also set configuration options using the next `$options` argument. Passing `1` or `null` will have the same effect, as `1` will simply multiply the default values by 1, resulting in the same default values.
 
@@ -87,7 +87,7 @@ $options: (
 ```
 
 Properties of the `$options` map can only be overwridden using another object of the map type, with matching keys. This argument and all its properties are entirely optional. The permitted properties for the `$options` map—along with their definitions—are:
- - `name`: **(string)** A preferred name for the animation created. If you do not supply an animation name, or when an empty string is the value (as is the default), a generic one is used in the format `typewriter-0` where the `0` increments with each use of the mixin to avoid naming conflicts.
+ - `name`: **(string)** A preferred name for the animation created. If you do not supply an animation name, or when an empty string is the value (as is the default), a generic one is used in the format `typed-0` where the `0` increments with each use of the mixin to avoid naming conflicts.
  - `iterations`: **(number)** This value determines how many times to loop the animation. This defaults to `infinite` to loop continuously. If a finite number is provided (e.g. `1`, `15`, etc.), the animation will repeat that many times and then type the first string again, at which point the typing animation will conclude, but the caret animation will continue if `caret` is enabled. The final typing animation of the first string is rendered via a separate animation that runs once the first full animation has completed all iterations.
  - `caret`: **(bool)** This boolean value determines whether to show a blinking text (insertion) cursor/caret at the end of the dynamically typed/deleted text where the caret would naturally be. This value defaults to `true`, but changing it to `false` will disable the blinking caret. The color of the caret defaults to match the same color as the text by making use of `currentColor`. To adjust the styles of the caret, add styles to the `::after` pseudo-element of the style which you apply the mixin `@include` to, conversely to the typed text itself, which makes use of the `::before` pseudo-element.
  - `caret-speed`: **(number)** This is the duration of one "blink" animation (in seconds) of the insertion cursor/caret when it has been enabled using the `caret` property. Like the `$speed` object values, these number values do not accept units.
@@ -101,7 +101,7 @@ Properties of the `$options` map can only be overwridden using another object of
 - `type-pausing-default`: **(string)** This string property accepts the values `fwd` (default), `bwd`, and `both` to set the default direction type-pauses set without the directional underscore are paused.
  - `prefix`: **(string)** This string will displays at the beginning of each typed string and will NOT be included in the animation of the text itself. It's important to note that if you set per-string styles, they cause undesirable effects to the prefix, causing its style to change instantly between strings. In this case, opt to place any prefix/suffix strings outside the animated text element altogether.
  - `end-on`: **(string/number)** This string value will ONLY be rendered when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
- - `alt-text`: **(string)** This string will be used to add alt text to the pseudo `::before` element for accessibility. When unset, this property will—by default—fall back to the value stored in `end-on`. If `end-on` is also unset, both values will default to the value of the first string passed to the typewriter mixin.
+ - `alt-text`: **(string)** This string will be used to add alt text to the pseudo `::before` element for accessibility. When unset, this property will—by default—fall back to the value stored in `end-on`. If `end-on` is also unset, both values will default to the value of the first string passed to the `typed` mixin.
 
 <h2 id="examples">Examples</h2>
 
@@ -109,44 +109,44 @@ Properties of the `$options` map can only be overwridden using another object of
 
 Type a single string
 ```scss
-@include typewriter("String 1");
+@include typed("String 1");
 ```
 Type two strings
 ```scss
-@include typewriter("String 1", "String 2");
+@include typed("String 1", "String 2");
 ```
 Type two strings, adjust the speed of `type` and `pause-deleted` properties (2 methods)
 ```scss
-@include typewriter("String 1", "String 2", [.1, null, null, .5]);
+@include typed("String 1", "String 2", [.1, null, null, .5]);
 ```
 ```scss
-@include typewriter("String 1", "String 2", (type: .1, pause-deleted: .5));
+@include typed("String 1", "String 2", (type: .1, pause-deleted: .5));
 ```
 Type three strings, disable the caret
 ```scss
-@include typewriter("String 1", "String 2", "String 3", null, (caret: false));
+@include typed("String 1", "String 2", "String 3", null, (caret: false));
 ```
 Type two strings, disable the caret, loop three times and end on the original string
 ```scss
-@include typewriter("String 1", "String 2", null, (caret: false, iterations: 3));
+@include typed("String 1", "String 2", null, (caret: false, iterations: 3));
 ```
 Type two strings, iterating twice, then end on a custom string
 ```scss
-@include typewriter("String 1", "String 2", null, (iterations: 2, end-on: "Done!"));
+@include typed("String 1", "String 2", null, (iterations: 2, end-on: "Done!"));
 ```
 Type two strings, provide a custom animation name
 ```scss
-@include typewriter("String 1", "String 2", null, (name: "my-typewriter"));
+@include typed("String 1", "String 2", null, (name: "my-typewriter"));
 ```
 Color a typewriter including the blinking cursor
 (hint: it inherits the text color automatically using `currentColor`)
 ```scss
 color: #f00;
-@include typewriter("String 1", "String 2");
+@include typed("String 1", "String 2");
 ```
 Setting custom styles per string, and double the default typing speed by passing a numeric multiplier value in place of the `$speeds` object.
 ```scss
-@include typewriter((
+@include typed((
     "Red": (color: #e53935),
     "Orange": (color: #f4511e),
     "Yellow": (color: #ffb300),
@@ -161,12 +161,12 @@ Setting custom styles per string, and double the default typing speed by passing
 
 Type mid-string, adding custom styles to text and caret
 ```html
-<p>I am a developer and enjoy working with languages like <span class="typewriter"></span> in my spare time.</p>
+<p>I am a developer and enjoy working with languages like <span class="typed"></span> in my spare time.</p>
 ```
 ```scss
-.typewriter {
+.typed {
     color: blueviolet;
-    @include typewriter("HTML", "CSS", "JavaScript", "SCSS");
+    @include typed("HTML", "CSS", "JavaScript", "SCSS");
     &::before {
         font-weight: bold;
     }
@@ -177,7 +177,7 @@ Type mid-string, adding custom styles to text and caret
 ```
 Add custom styles per string including the closing `end-on` string, excluding certain string(s) using an empty map, adding custom `$speed` object values using the list method, and setting values for each of the caret-related styling settings `caret-[speed/width/color/space]`.
 ```scss
-@include typewriter(
+@include typed(
     (
         "#1 String": (
             font-family: ("Times New Roman", arial),
@@ -207,7 +207,7 @@ Add custom styles per string including the closing `end-on` string, excluding ce
 ```
 Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in JavaScript
 ```scss
-@include typewriter("String 1\ALine 2", "String 2\ALine 2\ALine 3");
+@include typed("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
 
 <h2 id="browser-support">Browser Support</h2>
