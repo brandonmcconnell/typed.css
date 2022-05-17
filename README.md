@@ -211,18 +211,19 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
 ```
 
 <h2 id="browser-support">Browser Support</h2>
+<p>(now with full modern browser support! 🥳)</p>
 <ul>
     <li>Chrome ✅</li>
     <li>Edge ✅</li>
     <li>Firefox ✅</li>
     <li>Internet Explorer ✅</li>
     <li>Opera ✅</li>
-    <li>Safari ❌</li>
+    <li>Safari ✅</li>
     <li>WebView Android ✅</li>
     <li>Chrome Android ✅</li>
     <li>Firefox for Android ✅</li>
     <li>Opera Android ✅</li>
-    <li>Safari on iOS ❌</li>
+    <li>Safari on iOS ✅</li>
     <li>Samsung Internet ✅</li>
 </ul>
 
