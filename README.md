@@ -97,7 +97,7 @@ Properties of the `$options` map can only be overwridden using another object of
  - `styles`: **(map)** Any styles added to this map are displayed across all strings including the `end-on` string.
  - `end-styles`: **(map)** Any styles added to this map are displayed at the end of the animation once all iterations including the `end-on` string have completed their animations. These styles will not be rendered if the animation is set to loop continuously.
  - `delay`: **(number)** This is the duration of the delay (in seconds) before the animation initially begins. This property has a default value of `1`, as this delay helps to emphasize the animative nature of the mixin. Similarly to `caret-speed` and the `$speed` object values, this value also does not except units.
- - `type-pausing`: **(boolean)** This boolean value determines whether the current typewriter will replace any/all instances of the special "pause" syntax within its strings with a pause for the duration of however long it would take to type the number of characters indicated by its contained value. This property is set to true by default. The type-pause syntax is `<[INTEGER]>`. When enabled, a given string `Be right <[3]>there.` the total time it would take to animate the string forward would be the current `type` speed duration * 18. The 18 character-durations is comprised of three parts: `Be right ` (9 chars), `<[3]>` (same time as 3 chars), and `there.` (6 chars). 9+3+6=18. To specify a specific direction for a type-pause (e.g. forward, backward, or both), include an underscore next to the number within the special syntax, left-side for forward, right-sie for backward, and an underscore on each side for pausing in both direction. By default, pauses without an underscore only pause in the forward direction, but this defaukt setting can be adjusted using the `type-pausing-default` property.
+ - `type-pausing`: **(boolean)** This boolean value determines whether the current typed will replace any/all instances of the special "pause" syntax within its strings with a pause for the duration of however long it would take to type the number of characters indicated by its contained value. This property is set to true by default. The type-pause syntax is `<[INTEGER]>`. When enabled, a given string `Be right <[3]>there.` the total time it would take to animate the string forward would be the current `type` speed duration * 18. The 18 character-durations is comprised of three parts: `Be right ` (9 chars), `<[3]>` (same time as 3 chars), and `there.` (6 chars). 9+3+6=18. To specify a specific direction for a type-pause (e.g. forward, backward, or both), include an underscore next to the number within the special syntax, left-side for forward, right-sie for backward, and an underscore on each side for pausing in both direction. By default, pauses without an underscore only pause in the forward direction, but this defaukt setting can be adjusted using the `type-pausing-default` property.
 - `type-pausing-default`: **(string)** This string property accepts the values `fwd` (default), `bwd`, and `both` to set the default direction type-pauses set without the directional underscore are paused.
  - `prefix`: **(string)** This string will displays at the beginning of each typed string and will NOT be included in the animation of the text itself. It's important to note that if you set per-string styles, they cause undesirable effects to the prefix, causing its style to change instantly between strings. In this case, opt to place any prefix/suffix strings outside the animated text element altogether.
  - `end-on`: **(string/number)** This string value will ONLY be rendered when `iterations` is set to a finite number. Once the final iteration completes, the animation will type one final string and keep that string present, thereby concluding the animation. This property can be passed either any custom non-empty string or the nth-index of the string from the `$strings` list to use. By default, if using a finite list of `iterations`, the first string from the list will be re-typed if none is provided using the `end-on` property.
@@ -126,7 +126,7 @@ Type three strings, disable the caret
 ```scss
 @include typed("String 1", "String 2", "String 3", null, (caret: false));
 ```
-Type two strings, disable the caret, loop three times and end on the original string
+Type two strings, disable the caret, loop three times, and end on the original string
 ```scss
 @include typed("String 1", "String 2", null, (caret: false, iterations: 3));
 ```
@@ -205,7 +205,7 @@ Add custom styles per string including the closing `end-on` string, excluding ce
     )
 );
 ```
-Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in JavaScript
+Type a multi-line paragraph using `\A` for line breaks, similar to `\n` in JavaScript
 ```scss
 @include typed("String 1\ALine 2", "String 2\ALine 2\ALine 3");
 ```
@@ -229,4 +229,4 @@ Type a multi-line paragraph, using `\A` for line-breaks, similar to `\n` in Java
 
 <h2 id="credits">Credits</h2>
 <p>Hi there, I'm Brandon! 👨🏻‍💻</p>
-<p>It's nioce to meet you. So far, Typed.css has been a one-man show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in the effort to grow this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
+<p>It's nice to meet you. So far, Typed.css has been a one-dev show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in growing this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
