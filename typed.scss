@@ -246,7 +246,7 @@ $__typed-id: 0;
 					@error "When passing a numeric value into the $speeds argument, it works as a multiplier and thereby requires a positive non-zero number (integer or float). To slow down the default speed, use a decimal number between 0 and 1. To speed up the default speed, use a number greater than 1. A value of 0.5 will reduce the speed by 50%, where a value of 2 will double the speed.";
 				}
 				@each $key, $value in $speeds {
-					$speeds: map-merge($speeds, ($key: $value * (1 / $parameter)));
+					$speeds: map-merge($speeds, ($key: $value * calc(1 / $parameter)));
 				}
 			} @else if $parameter != null {
 				@error "The speed argument requires either a map, list, or null value."
