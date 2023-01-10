@@ -413,9 +413,9 @@ $__typed-id: 0;
 				@if $j < $combined-length {
 					#{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
 						@if $j <= $fwd-length {
-							@include __typed-write-to-content(quote(#{str-slice($fwd-string, 1, $j)}), $alt-text, $prefix);
+							@include __typed-write-to-content("#{str-slice($fwd-string, 1, $j)}", $alt-text, $prefix);
 						} @else {
-							@include __typed-write-to-content(quote(#{str-slice($bwd-string, 1, $bwd-length - ($j - $fwd-length))}), $alt-text, $prefix);
+							@include __typed-write-to-content("#{str-slice($bwd-string, 1, $bwd-length - ($j - $fwd-length))}", $alt-text, $prefix);
 						}
 						@include __typed-spread-styles($strings-styles, $i, $global-styles);
 					}
