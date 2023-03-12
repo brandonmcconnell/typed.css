@@ -335,7 +335,7 @@ $__typed-id: 0;
 	$dur-char-bwd: map-get($speeds, delete);
 	$dur-done-gap: map-get($speeds, pause-deleted);
 	$animation-delay: map-get($options, delay);
-	$final-string: if(map-get($options, end-on) != "", map-get($options, end-on), nth($strings, 1));
+	$final-string: __typed-inject-pauses(if(map-get($options, end-on) != "", map-get($options, end-on), nth($strings, 1)));
 	$alt-text: if(map-get($options, alt-text) != "", map-get($options, alt-text), $final-string);
 	$caret-width: map-get($options, caret-width);
 	$caret-color: map-get($options, caret-color);
