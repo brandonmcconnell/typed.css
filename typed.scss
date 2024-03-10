@@ -8,7 +8,7 @@ $__supports-first-class-calc: calc(1) == 1;
 }
 
 $__typed-pauses-chars: (fwd: "\200b", bwd: "\200c", both: "\feff");
-@function __typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $string-nth, $char-nth, $modifier) {
+@function __typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $string-nth, $char-nth, $modifier) {
 	$string: nth($strings, $string-nth);
 	$length: str-length($string);
 	$fwd-string: __typed-remove-bwd-pause-chars($string);
@@ -411,7 +411,7 @@ $__typed-id: 0;
 			$combined-length: $fwd-length + $bwd-length;
 			@for $j from 1 through $combined-length {
 				@if $j < $combined-length {
-					#{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
+					#{__typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j+1, -.001)} {
 						@if $j <= $fwd-length {
 							@include __typed-write-to-content("#{str-slice($fwd-string, 1, $j)}", $alt-text, $prefix);
 						} @else {
@@ -421,12 +421,12 @@ $__typed-id: 0;
 					}
 				} @else {
 					@if $i < length($strings) {
-						#{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i+1, 1, -.001)} {
+						#{__typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, #{__typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i+1, 1, -.001)} {
 							@include __typed-write-to-content("", $alt-text, $prefix);
 							@include __typed-spread-styles($strings-styles, $i, $global-styles);
 						}
 					} @else {
-						#{__typed-percent-calc($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, 100% {
+						#{__typed-percent-calculate($dur-char-fwd, $dur-full-gap, $dur-char-bwd, $dur-done-gap, $dur-total, $strings, $i, $j, 0)}, 100% {
 							@include __typed-write-to-content("", $alt-text, $prefix);
 							@include __typed-spread-styles($strings-styles, $i, $global-styles);
 						}
