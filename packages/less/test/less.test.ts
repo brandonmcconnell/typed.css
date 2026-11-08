@@ -5,20 +5,9 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import less from 'less';
-import postcss from 'postcss';
 import { toCSS, typed, type TypedConfig } from '@typed-css/core';
 import typedLess from '../src/index.ts';
-
-/** Reduces CSS to comparable structure, ignoring formatting differences between tools. */
-function canonical(css: string): string {
-	const lines: string[] = [];
-	postcss.parse(css).walk(node => {
-		if (node.type === 'rule') lines.push(`rule ${node.selector.split(',').map(part => part.trim()).join(', ')}`);
-		else if (node.type === 'atrule') lines.push(`@${node.name} ${node.params}`);
-		else if (node.type === 'decl') lines.push(`  ${node.prop}: ${node.value.replace(/\s*\/\s*/g, '/').replace(/\s+/g, ' ')}`);
-	});
-	return lines.join('\n');
-}
+import { canonicalCSS as canonical } from '../../../test-utils/canonical-css.ts';
 
 async function renderLess(source: string): Promise<string> {
 	return (await less.render(source, { plugins: [typedLess] })).css;
