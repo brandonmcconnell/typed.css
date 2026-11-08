@@ -32,11 +32,11 @@ const fixtures: readonly Fixture[] = [
 	},
 	{
 		title: 'speed map, end-on, and caret styling',
-		stylus: `"Here's lookin at you, kid", "I'll be back", { type: .05, pause-deleted: .5 }, { iterations: 2, end-on: "Done!", caret-width: 2px, caret-color: #ffa500, caret-speed: .65 }`,
+		stylus: `"Here's lookin at you, kid", "I'll be back", { type: .05, pause-deleted: .5 }, { iterations: 2, end-on: "Done!", caret-width: 2px, caret-color: orange, caret-speed: .65 }`,
 		config: {
 			strings: ["Here's lookin at you, kid", "I'll be back"],
 			speeds: { type: 0.05, pauseDeleted: 0.5 },
-			options: { iterations: 2, endOn: 'Done!', caretWidth: '2px', caretColor: '#ffa500', caretSpeed: 0.65 },
+			options: { iterations: 2, endOn: 'Done!', caretWidth: '2px', caretColor: 'orange', caretSpeed: 0.65 },
 		},
 	},
 	{

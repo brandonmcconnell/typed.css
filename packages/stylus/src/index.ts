@@ -87,6 +87,12 @@ function toArgValue(node: unknown): ArgValue {
 			return { kind: 'keyword', value: String(node['name']) };
 		case 'literal':
 			return fromRawCSS(String(node['val']));
+		case 'rgba':
+		case 'hsla': {
+			// Keep colors as written (`red`, `#F00`) instead of Stylus's normalized hex.
+			const written = [node['name'], node['raw']].find((value): value is string => typeof value === 'string' && value !== '');
+			return { kind: 'keyword', value: written ?? node.toString() };
+		}
 		case 'object': {
 			const values = node['vals'];
 			const entries = isRecord(values) ? Object.entries(values).map(([key, value]): readonly [string, ArgValue] => [key, toArgValue(value)]) : [];
