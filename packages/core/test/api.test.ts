@@ -10,6 +10,8 @@ describe('typed()', () => {
 		assert.match(first.animationName, /^typed-[0-9a-z]+$/);
 		assert.equal(first.animationName, second.animationName);
 		assert.notEqual(first.animationName, different.animationName);
+		const reordered = typed({ options: { iterations: 2, caret: false }, strings: ['a', 'b'] });
+		assert.equal(typed({ strings: ['a', 'b'], options: { caret: false, iterations: 2 } }).animationName, reordered.animationName);
 	});
 
 	it('warns when endOn is set with infinite iterations', () => {

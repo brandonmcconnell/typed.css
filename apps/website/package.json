@@ -1,0 +1,32 @@
+{
+  "name": "@typed-css/website",
+  "version": "0.0.0",
+  "private": true,
+  "description": "typedcss.com: live examples, a language switcher, and the CSS generator.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types --no-warnings=ExperimentalWarning 'test/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@typed-css/core": "^0.0.0",
+    "normalize.css": "^8.0.1",
+    "prismjs": "^1.30.0"
+  },
+  "devDependencies": {
+    "@typed-css/less": "^0.0.0",
+    "@typed-css/stylus": "^0.0.0",
+    "@typed-css/tailwind": "^0.0.0",
+    "@types/less": "^3.0.8",
+    "@types/prismjs": "^1.26.6",
+    "@types/stylus": "^0.48.43",
+    "less": "^4.9.1",
+    "sass": "^1.108.1",
+    "stylus": "^0.64.0",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.6"
+  }
+}

@@ -147,7 +147,7 @@ function assertNumber(value: unknown, label: string): asserts value is number {
 }
 
 type SpeedsTuple = Extract<TypedSpeedsInput, readonly unknown[]>;
-const isSpeedsTuple = (input: Exclude<TypedSpeedsInput, number>): input is SpeedsTuple => Array.isArray(input);
+export const isSpeedsTuple = (input: Exclude<TypedSpeedsInput, number>): input is SpeedsTuple => Array.isArray(input);
 
 function resolveSpeeds(input: TypedSpeedsInput | null | undefined): TypedSpeeds {
 	if (input === null || input === undefined) return DEFAULT_SPEEDS;
@@ -247,6 +247,18 @@ const formatStyleValue = (value: StyleValue): string => (typeof value === 'numbe
 const styleDeclarations = (styles: Styles): Declaration[] =>
 	Object.entries(styles).map(([property, value]): Declaration => [property, formatStyleValue(value)]);
 
+/** JSON with sorted keys and without `undefined` members, so equivalent configs serialize identically. */
+function stableStringify(value: unknown): string {
+	if (Array.isArray(value)) return `[${value.map(item => (item === undefined ? 'null' : stableStringify(item))).join(',')}]`;
+	if (typeof value === 'object' && value !== null) {
+		const entries = Object.entries(value)
+			.filter(([, entry]) => entry !== undefined)
+			.sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+		return `{${entries.map(([key, entry]) => `${JSON.stringify(key)}:${stableStringify(entry)}`).join(',')}}`;
+	}
+	return JSON.stringify(value) ?? 'null';
+}
+
 /** FNV-1a, used to derive a stable default animation name from the config. */
 function hashConfig(value: string): string {
 	let hash = 0x811c9dc5;
@@ -286,7 +298,7 @@ export function typed(config: TypedConfig): TypedResult {
 	const prefix = sanitizePauses(options.prefix);
 	const strings = normalized.map(({ text }) => (options.typePausing ? injectPauses(text, options.typePausingDefault) : text));
 	const stringStyles: readonly Styles[] = usesStringStyles ? normalized.map(({ styles }) => styles ?? {}) : [];
-	const animationName = options.name !== '' ? options.name : `typed-${hashConfig(JSON.stringify(config))}`;
+	const animationName = options.name !== '' ? options.name : `typed-${hashConfig(stableStringify(config))}`;
 
 	const contentDeclarations = (text: string): Declaration[] => {
 		const content = quoteString(ZERO_WIDTH_SPACE + prefix + sanitizePauses(text));

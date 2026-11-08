@@ -3,12 +3,14 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run build && npm test --workspaces --if-present"
+    "test": "npm run build && npm test --workspaces --if-present",
+    "dev": "npm run build -w @typed-css/core && npm run dev -w @typed-css/website"
   },
   "devDependencies": {
     "@types/color-name": "^2.0.0",

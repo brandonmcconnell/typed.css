@@ -1,5 +1,6 @@
 export {
 	typed,
+	isSpeedsTuple,
 	DEFAULT_SPEEDS,
 	type Declaration,
 	type KeyframeBlock,
