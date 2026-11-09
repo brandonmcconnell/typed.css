@@ -1,0 +1,17 @@
+{
+  "name": "typed-css-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run build && npm test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.1",
+    "typescript": "^5.9.3"
+  }
+}

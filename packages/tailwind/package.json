@@ -1,0 +1,32 @@
+{
+  "name": "@typed-css/tailwind",
+  "version": "0.0.0",
+  "description": "Tailwind CSS plugin (v3 and v4) for Typed.css typewriter animations, powered by @typed-css/core.",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types --no-warnings=ExperimentalWarning 'test/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@typed-css/core": "0.0.0"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.5",
+    "tailwindcss-v3": "npm:tailwindcss@^3.4.19"
+  }
+}

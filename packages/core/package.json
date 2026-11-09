@@ -1,0 +1,24 @@
+{
+  "name": "@typed-css/core",
+  "version": "0.0.0",
+  "description": "Framework-agnostic engine behind Typed.css: builds the typewriter animation once and serializes it to raw CSS or CSS-in-JS.",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types --no-warnings=ExperimentalWarning 'test/**/*.test.ts'"
+  },
+  "devDependencies": {
+    "sass": "^1.94.2"
+  }
+}
