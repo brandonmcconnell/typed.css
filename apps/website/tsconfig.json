@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "noEmit": true,
+    "paths": {
+      "@typed-css/core": [
+        "../../packages/core/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "test",
+    "vite.config.ts",
+    "../../test-utils"
+  ]
+}

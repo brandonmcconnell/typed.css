@@ -1,5 +1,6 @@
 export {
 	typed,
+	isSpeedsTuple,
 	DEFAULT_SPEEDS,
 	type Declaration,
 	type KeyframeBlock,
@@ -18,4 +19,5 @@ export {
 } from './typed.ts';
 export { toCSS, toCSSObject, splitSelectorList, type CSSDeclarations, type CSSObjectResult, type ToCSSOptions } from './serialize-css.ts';
 export { formatNumber, quoteString } from './serialize-value.ts';
+export { configFromArgs, fromRawCSS, toCSSValue, unescapeCSS, type ArgValue } from './args.ts';
 export { injectPauses, sanitizePauses, PAUSE_CHARS, type PauseDirection } from './pauses.ts';

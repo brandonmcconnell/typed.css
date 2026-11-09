@@ -1,0 +1,34 @@
+{
+  "name": "@typed-css/stylus",
+  "version": "0.0.0",
+  "description": "Stylus plugin for Typed.css typewriter animations, powered by @typed-css/core.",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "type": "module",
+  "main": "./plugin.cjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./plugin.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "plugin.cjs"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types --no-warnings=ExperimentalWarning 'test/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@typed-css/core": "0.0.0"
+  },
+  "peerDependencies": {
+    "stylus": ">=0.54.0"
+  },
+  "devDependencies": {
+    "@types/stylus": "^0.48.43",
+    "stylus": "^0.64.0"
+  }
+}
