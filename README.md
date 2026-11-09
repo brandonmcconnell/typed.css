@@ -240,3 +240,4 @@ npm test
 <h2 id="credits">Credits</h2>
 <p>Hi there, I'm Brandon! 👨🏻‍💻</p>
 <p>It's nice to meet you. So far, Typed.css has been a one-dev show, but I'm always open to feedback or help from others to level up software. If you have ideas for improvements or want to join in growing this module, please email me directly at brandon[at]dreamthinkbuild.com or open an issue here on GitHub with your idea(s), and I'll get back to you as soon as I can. Cheers! 🍻</p>
+Geld test line, please ignore.
