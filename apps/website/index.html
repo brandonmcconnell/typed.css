@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Typed.css - Live Demo</title>
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<meta name="description" content="CSS-only typewriter animations for SCSS, Tailwind CSS, Less, Stylus, and plain CSS." />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+		<script src="https://kit.fontawesome.com/43c605e71f.js" crossorigin="anonymous" defer></script>
+		<script type="module" src="/src/main.ts"></script>
+	</head>
+	<body>
+		<div id="pre-header">
+			<h1>Typed.css</h1>
+			<h2>Live Examples</h2>
+			<h3>Watch CSS-typed text <span class="typed-hero"></span></h3>
+		</div>
+
+		<header>
+			<input id="mobile-nav-trigger" type="checkbox" />
+			<label for="mobile-nav-trigger">
+				<span class="mobile-nav-trigger-inactive"><i class="fa-solid fa-bars"></i>Menu</span>
+				<span class="mobile-nav-trigger-active"><i class="fa-solid fa-xmark"></i>Close</span>
+			</label>
+			<nav id="mobile-nav">
+				<a href="https://github.com/brandonmcconnell/typed.css#table-of-contents"><i class="fa-solid fa-book-open"></i>Documentation</a>
+				<a href="https://github.com/brandonmcconnell/typed.css"><i class="fa-solid fa-code-compare"></i>Repository</a>
+				<a href="https://github.com/brandonmcconnell/typed.css/issues"><i class="fa-solid fa-pen-clip"></i>Feature Request</a>
+				<a href="https://github.com/brandonmcconnell/typed.css/issues"><i class="fa-solid fa-bug"></i>Bug Report</a>
+			</nav>
+			<div id="language-switcher" role="radiogroup" aria-label="Code language"></div>
+		</header>
+
+		<h2 id="install">Install</h2>
+		<p class="section-intro">Pick your stack with the switcher above. Every option produces the same CSS, so you can switch at any time.</p>
+		<div id="install-snippets"></div>
+
+		<h2 id="generator">Generator</h2>
+		<p class="section-intro">Build a typewriter here and copy it as <span class="current-language-name">SCSS</span>, or as raw CSS you can paste into any stylesheet without a preprocessor.</p>
+
+		<form id="generator-form" novalidate>
+			<input id="generator-form--advanced-toggle" type="checkbox" />
+			<div class="form-group has-checkbox" id="form-group-strings">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Strings</span><label><input type="checkbox" /> unique styles</label></h4>
+				<div class="field-group">
+					<button class="generator-string-action generator-string-action__add" aria-label="Add string" type="button"><i class="fa-solid fa-plus"></i></button>
+				</div>
+			</div>
+			<div class="form-group has-checkbox checked" id="form-group-speeds">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Speeds<small>(in seconds)</small></span><label><input type="checkbox" checked /> default</label></h4>
+				<div class="field-group if-not-checked">
+					<label for="speed-type"><span>Fwd</span><input id="speed-type" data-init-value="0.1" value="0.1" min="0.01" max="100" step="0.01" type="number" disabled required /></label>
+					<label for="speed-pause-typed"><span>Fwd Pause</span><input id="speed-pause-typed" data-init-value="2" value="2" min="0.01" max="100" step="0.01" type="number" disabled required /></label>
+					<label for="speed-delete"><span>Bwd</span><input id="speed-delete" data-init-value="0.08" value="0.08" min="0.01" max="100" step="0.01" type="number" disabled required /></label>
+					<label for="speed-pause-deleted"><span>Bwd Pause</span><input id="speed-pause-deleted" data-init-value="1" value="1" min="0.01" max="100" step="0.01" type="number" disabled required /></label>
+				</div>
+			</div>
+			<div class="form-group advanced" id="form-animation-name">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Animation Name<small>(also used for the class name)</small></span></h4>
+				<div class="field-group">
+					<div class="generator-string-wrapper"><input type="text" class="generator-string" placeholder="my-first-typewriter" /></div>
+				</div>
+			</div>
+			<div class="form-group advanced has-checkbox checked" id="form-group-iterations">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Iterations</span><label><input type="checkbox" checked /> infinite</label></h4>
+				<div class="field-group if-not-checked">
+					<input id="iterations" aria-label="Iterations" data-init-value="1" value="1" min="1" max="100" step="1" type="number" disabled required />
+				</div>
+			</div>
+			<div class="form-group advanced has-checkbox checked" id="form-group-caret">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Caret</span><label><input type="checkbox" checked /> enabled</label></h4>
+				<div class="field-group if-checked">
+					<label for="caret-speed"><span>Speed</span><input id="caret-speed" data-init-value="0.75" value="0.75" min="0.01" max="100" step="0.01" type="number" required /></label>
+					<label for="caret-width"><span>Width</span><input id="caret-width" data-init-value="1ch" value="1ch" type="text" class="css-units" data-min="0.01" required /></label>
+					<label for="caret-color"><span>Color</span><input id="caret-color" data-init-value="currentColor" value="currentColor" type="text" class="css-color" required /></label>
+					<label for="caret-space"><span>Space</span><input id="caret-space" data-init-value="0.1ch" value="0.1ch" type="text" class="css-units" required /></label>
+				</div>
+			</div>
+			<div class="form-group advanced" id="form-group-prefix">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">Prefix String</span></h4>
+				<div class="field-group">
+					<div class="generator-string-wrapper"><input type="text" class="generator-string" placeholder="Enter a string here" /></div>
+				</div>
+			</div>
+			<div class="form-group advanced has-checkbox" id="form-group-endon-strings">
+				<h4 class="form-group-heading"><span class="form-group-heading-inner">End-On String<small>(needs finite iterations)</small></span><label><input type="checkbox" /> unique styles</label></h4>
+				<div class="field-group">
+					<div class="generator-string-wrapper"><input type="text" class="generator-string" placeholder="Enter a string here" /><pre class="generator-string-styles" contenteditable="plaintext-only" aria-label="End-on string styles"></pre></div>
+				</div>
+			</div>
+			<div id="generator-form-actions">
+				<label for="generator-form--advanced-toggle">
+					<span class="generator-form--advanced-toggle--trigger generator-form-action" id="generator-form--advanced-toggle--trigger__show"><i class="fa-solid fa-plus"></i>Show</span>
+					<span class="generator-form--advanced-toggle--trigger generator-form-action" id="generator-form--advanced-toggle--trigger__hide"><i class="fa-solid fa-minus"></i>Hide</span>
+				</label>
+				<button class="generator-form-action" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i>Generate</button>
+			</div>
+		</form>
+
+		<section id="generator-output" hidden aria-live="polite">
+			<p id="generator-error" role="alert" hidden></p>
+			<div id="generator-result">
+				<h3>Preview</h3>
+				<live-demo id="generator-preview"></live-demo>
+				<h3>Your <span class="current-language-name">SCSS</span></h3>
+				<div id="generator-snippet"></div>
+				<h3>Raw CSS</h3>
+				<p class="section-intro">No preprocessor needed: paste this into any stylesheet, then add the <code id="generator-class"></code> class to an element.</p>
+				<div id="generator-css"></div>
+				<div class="generator-output-actions">
+					<button type="button" class="generator-form-action" id="generator-copy-css"><i class="fa-solid fa-copy"></i>Copy CSS</button>
+					<button type="button" class="generator-form-action" id="generator-download-css"><i class="fa-solid fa-download"></i>Download .css</button>
+				</div>
+			</div>
+		</section>
+
+		<h2 id="examples">Examples</h2>
+		<div id="examples-list"></div>
+
+		<footer></footer>
+
+		<div id="credit">
+			<div id="profile">
+				<div id="profile-pic"></div>
+				<span id="profile-name">Brandon McConnell</span>
+			</div>
+			<div id="social-buttons">
+				<a href="https://twitter.com/intent/follow?&screen_name=branmcconnell" id="social-twitter" aria-label="Follow me on Twitter"><i class="fa-brands fa-twitter"></i><span></span></a>
+				<a href="https://www.buymeacoffee.com/brandonmcconnell" id="social-buymeacoffee" aria-label="Support me by buying me a coffee"><img src="https://assets.codepen.io/1580009/buymeacoffee-emblem_dark_border.svg" alt="Buy Me a Coffee logo" /><span></span></a>
+			</div>
+		</div>
+	</body>
+</html>

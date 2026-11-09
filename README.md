@@ -1,6 +1,6 @@
 <div align="center">
 <h1>Typed.css</h1>
-Typed.css is a fully functional typewriter mixin for CSS preprocessors, currently supporting in SCSS, and soon adding support for Less and Stylus as well.<br><a href="http://typedcss.com/" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
+Typed.css is a fully functional CSS typewriter for SCSS, Tailwind CSS, Less, Stylus, and plain CSS.<br><a href="http://typedcss.com/" target="_blank">Live Demo</a> | Follow me on Twitter <a href="https://twitter.com/branmcconnell" target="_blank">@branmcconnell</a><br><br>
 <img alt="demonstration of Typed.css in action" src="https://assets.codepen.io/1580009/typewriter-scss-bg.png" style="mix-blend-mode: screen;">
 </div>
 
@@ -23,6 +23,27 @@ Typed.css is a fully functional typewriter mixin for CSS preprocessors, currentl
 
 ```scss
 @import 'typed';
+```
+
+Typed.css also works without SCSS. Every package below runs the same engine (`@typed-css/core`) and produces the same CSS as the SCSS mixin, and the [generator](https://typedcss.com/#generator) outputs raw CSS you can paste into any stylesheet.
+
+| Package | Usage |
+| --- | --- |
+| `@typed-css/tailwind` | Tailwind CSS v3 and v4 plugin: `theme.typed` entries become `typed-<name>` classes |
+| `@typed-css/less` | `@plugin "@typed-css/less";` then `typed(...)` inside a ruleset |
+| `@typed-css/stylus` | `stylus(source).use(typed())` then `typed(...)` inside a selector |
+| `@typed-css/core` | `toCSS(typed({ strings: ['Hello'] }), '.headline')` from JavaScript |
+
+The preprocessor plugins take the same positional arguments as the mixin: strings, then speeds, then options. See the [live demo](https://typedcss.com/) with its language switcher for every example in each syntax.
+
+<h3 id="development">Development</h3>
+
+This repository is an npm workspaces monorepo: `packages/*` holds the core engine and the plugins, and `apps/website` is typedcss.com.
+
+```sh
+npm install
+npm run dev      # website at http://localhost:5173
+npm test         # builds everything, then runs every package's tests
 ```
 
 <h2 id="syntax">Syntax</h2>
